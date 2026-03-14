@@ -3,7 +3,13 @@ spring:
     name: ai-super-agent
   profiles:
     active: local
-
+  ai:
+    dashscope:
+      #        注意这里的导入格式
+      api-key: sk-1579485902c84c5b83699923adb2a405
+      chat:
+        options:
+          model: qwen-plus
 server:
   port: 8123
   servlet:
