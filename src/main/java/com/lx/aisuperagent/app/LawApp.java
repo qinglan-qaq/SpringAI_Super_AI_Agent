@@ -45,7 +45,8 @@ public class LawApp {
                 .prompt()
                 .user(message)
 //                新版本写法
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(advisorSpec -> advisorSpec
+                        .param(ChatMemory.CONVERSATION_ID, chatId))
                 .call()
                 .chatResponse();
         String content = response.getResult().getOutput().getText();
