@@ -20,7 +20,8 @@ public class SpringAIInvoke implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        AssistantMessage output = dashscopeChatModel.call(new Prompt("老婆~你终于回来了,桌上的菜还是热的,我们喝点小酒吗?(晃了晃酒杯)"))
+        AssistantMessage output = dashscopeChatModel
+                .call(new Prompt("以余华的口吻解释,在长时间艰辛的努力后仍然失败的原因,一百字以内"))
                 .getResult().getOutput();
         System.out.println(output.getText());
     }

@@ -1,9 +1,11 @@
 spring:
+  application:
+    name: ai-super-agent
     # application.yml对需要调用大模型的配置
     ai:
       dashscope:
-#        注意这里的导入格式
-        api-key: sk-1579485902c84c5b83699923adb2a405
+#        替换你的key
+        api-key: your-api-key
         chat:
           options:
             model: qwen-plus

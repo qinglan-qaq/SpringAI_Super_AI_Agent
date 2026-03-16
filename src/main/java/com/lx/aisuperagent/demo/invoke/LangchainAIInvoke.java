@@ -10,7 +10,7 @@ public class LangchainAIInvoke {
                 .apiKey(TestApiKey.apiKey)
                 .modelName("qwen-plus")
                 .build();
-        String chat = qwenChatModel.chat("qwen-plus和qwen-max谁更好 区别在哪 我之前问max说自己最好");
+        String chat = qwenChatModel.chat("以莫言的口吻解释,在长时间艰辛的努力后仍然失败的原因,一百字以内");
         System.out.println(chat);
     }
 }
