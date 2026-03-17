@@ -7,8 +7,7 @@ spring:
   ai:
     dashscope:
       #        注意这里的导入格式
-#      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:your-api-key}
-      api-key: sk-1579485902c84c5b83699923adb2a405
+      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:your-api-key}
       chat:
         options:
           model: qwen-plus
