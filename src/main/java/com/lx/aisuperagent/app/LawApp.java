@@ -3,6 +3,7 @@ package com.lx.aisuperagent.app;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
@@ -28,7 +29,9 @@ public class LawApp {
         this.chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
-                        MessageChatMemoryAdvisor.builder(chatMemory).build()
+//                        真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                        SimpleLoggerAdvisor.builder().build()
                 )
                 .build();
     }

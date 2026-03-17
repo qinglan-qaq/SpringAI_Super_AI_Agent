@@ -1,7 +1,7 @@
 spring:
   application:
     name: ai-super-agent
-#    激活本地文件
+  #    激活本地文件
   profiles:
     active: local
   ai:
@@ -11,6 +11,11 @@ spring:
       chat:
         options:
           model: qwen-plus
+  #          开启日志调试
+  logging:
+    level:
+      org.springframework.ai.chat.client.advisor: debug
+
 server:
   port: 8123
   servlet:
