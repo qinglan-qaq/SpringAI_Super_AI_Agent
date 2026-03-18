@@ -31,8 +31,16 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!-- Alibaba BOM (管理 dashscope 相关) -->
             <dependency>
-                <!--统一的Spring管理系统-->
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-bom</artifactId>
+                <version>1.1.2.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring AI BOM 1.1.2 强制覆盖版本 -->
+            <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
                 <version>1.1.2</version>
@@ -43,6 +51,14 @@
     </dependencyManagement>
 
     <dependencies>
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.ai</groupId>-->
+<!--            <artifactId>spring-ai-core</artifactId>-->
+<!--        </dependency>-->
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -86,16 +102,17 @@
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-            <version>1.1.2.0</version>
+
         </dependency>
 
         <!-- DashScope ChatModel 支持（如果使用其他模型，请跳转 Spring AI 文档选择对应的 starter） -->
+        <!-- Source: https://mvnrepository.com/artifact/com.alibaba.cloud.ai/spring-ai-alibaba-starter-dashscope -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
             <version>1.1.2.0</version>
+            <scope>compile</scope>
         </dependency>
-
         <!-- Source: https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
@@ -124,16 +141,25 @@
             <version>5.6.2</version>
         </dependency>
 
+
+        <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-client-chat -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-client-chat</artifactId>
+        </dependency>
+
     </dependencies>
 
     <repositories>
         <repository>
+            <id>aliyun</id>
+            <name>Aliyun Repository</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+        <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
 

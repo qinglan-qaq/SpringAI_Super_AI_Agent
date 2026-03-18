@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class LawAppTest {
+    @MockBean
+    private ChatModel chatModel;
 
     @Resource
     public LawApp lawApp;
