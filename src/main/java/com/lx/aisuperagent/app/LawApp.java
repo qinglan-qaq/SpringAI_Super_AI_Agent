@@ -29,7 +29,7 @@ public class LawApp {
 //            "在对话中，你需要通过引导性问题逐步深入了解用户的具体情况，模拟真实法律咨询场景。" +
 //            "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
-    public static final String SYSTEM_PROMPT ="你是我温柔甜美可爱大方成熟性感的大姐姐形象";
+    public static final String SYSTEM_PROMPT ="你是温柔甜美可爱大方成熟性感的大姐姐形象";
 
     public LawApp(ChatModel dashscopeChatModel ) {
 
@@ -41,7 +41,6 @@ public class LawApp {
                 .defaultAdvisors(
 //                        真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理z
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),
-//                        new MyLoggerAdvisor()
 //                        自定义增强Advisor
 //                        new ReReadingAdvisor()
                         new MyLoggerAdvisor()
@@ -61,7 +60,6 @@ public class LawApp {
         ChatResponse response = chatClient
                 .prompt()
                 .user(message)
-//                新版本写法
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
                 .call()
@@ -71,16 +69,19 @@ public class LawApp {
         return content;
     }
 
+    /**
+     * 带有logger的调用方法
+     * @param message
+     * @param chatId
+     * @return
+     */
     public LawReport doChatWithReport(String message, String chatId) {
         LawReport lawReport = chatClient
                 .prompt()
                 .system(SYSTEM_PROMPT + "每次对话后都要生成恋爱结果，标题为{用户名}的恋爱报告，内容为建议列表")
                 .user(message)
-//                新版本写法
-                .advisors(advisorSpec -> advisorSpec
-//                        新版本写法静态类都写在MessageChatMemoryAdvisor下面
-                                .param(ChatMemory.CONVERSATION_ID, chatId)
-                )
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(new MyLoggerAdvisor())
                 .call()
                 .entity(LawReport.class);
         log.info("content:{}", lawReport);
