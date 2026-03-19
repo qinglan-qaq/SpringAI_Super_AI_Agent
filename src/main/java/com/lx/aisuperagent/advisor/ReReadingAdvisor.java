@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class ReReadingAdvisor implements BaseAdvisor {
 
+//    显式地要求模型“再读一遍问题”
     private static final String DEFAULT_RE2_ADVISE_TEMPLATE = """
 			{re2_input_query}
 			Read the question again: {re2_input_query}
@@ -22,7 +23,7 @@ public class ReReadingAdvisor implements BaseAdvisor {
     public ReReadingAdvisor() {
         this(DEFAULT_RE2_ADVISE_TEMPLATE);
     }
-
+//  自定义重读模板
     public ReReadingAdvisor(String re2AdviseTemplate) {
         this.re2AdviseTemplate = re2AdviseTemplate;
     }
@@ -31,6 +32,7 @@ public class ReReadingAdvisor implements BaseAdvisor {
     public ChatClientRequest before(ChatClientRequest chatClientRequest, AdvisorChain advisorChain) {
         String augmentedUserText = PromptTemplate.builder()
                 .template(this.re2AdviseTemplate)
+//                获取原始消息中的文本替换re2_input_query
                 .variables(Map.of("re2_input_query", chatClientRequest.prompt().getUserMessage().getText()))
                 .build()
                 .render();

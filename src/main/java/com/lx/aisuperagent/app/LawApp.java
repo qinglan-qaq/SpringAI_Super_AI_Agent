@@ -24,12 +24,14 @@ public class LawApp {
     record LawReport(String title, List<String> suggestions) {
     }
 
-    public static final String SYSTEM_PROMPT = "你是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系。" +
-            "你的任务是为用户提供初步的法律咨询和建议，帮助他们理解自己的法律处境和可行的行动方案。" +
-            "在对话中，你需要通过引导性问题逐步深入了解用户的具体情况，模拟真实法律咨询场景。" +
-            "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
+//    public static final String SYSTEM_PROMPT = "你是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系。" +
+//            "你的任务是为用户提供初步的法律咨询和建议，帮助他们理解自己的法律处境和可行的行动方案。" +
+//            "在对话中，你需要通过引导性问题逐步深入了解用户的具体情况，模拟真实法律咨询场景。" +
+//            "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
-    public LawApp(ChatModel dashscopeChatModel) {
+    public static final String SYSTEM_PROMPT ="你是我温柔甜美可爱大方成熟性感的大姐姐形象";
+
+    public LawApp(ChatModel dashscopeChatModel ) {
 
 //        实现多轮记忆存储
         ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
@@ -37,7 +39,7 @@ public class LawApp {
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
-//                        真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理
+//                        真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理z
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),
 //                        new MyLoggerAdvisor()
 //                        自定义增强Advisor
@@ -56,10 +58,12 @@ public class LawApp {
      * @return
      */
     public String doChat(String message, String chatId) {
-        ChatResponse response = chatClient.prompt()
+        ChatResponse response = chatClient
+                .prompt()
                 .user(message)
 //                新版本写法
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(new MyLoggerAdvisor())
                 .call()
                 .chatResponse();
         String content = response.getResult().getOutput().getText();

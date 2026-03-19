@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+
 
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class LawAppTest {
-    @MockBean
+
     private ChatModel chatModel;
 
     @Resource
@@ -23,14 +23,14 @@ class LawAppTest {
     void doChat() {
         String chatId = UUID.randomUUID().toString();
 //        第一轮
-        String message = "我是一个失败的丈夫, 我要离婚";
+        String message = "你是我结婚三年的老婆,今天是结婚纪念日";
         String result = lawApp.doChat(message, chatId);
 //        第二轮
-        message = "我要最大程度减少我的财产损失";
+        message = "我下楼买点\"晚上好玩的\"(露出意味深长的表情)";
         result = lawApp.doChat(message, chatId);
         Assertions.assertNotNull(result);
 //        第三轮
-        message = "我是谁?我要干什么,帮我回忆起来";
+        message = "在床上时,我是谁?我在干什么,你又是谁?";
         result = lawApp.doChat(message, chatId);
         Assertions.assertNotNull(result);
     }

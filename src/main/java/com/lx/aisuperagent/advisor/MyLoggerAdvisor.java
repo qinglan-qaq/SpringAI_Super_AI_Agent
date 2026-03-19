@@ -36,13 +36,14 @@ public class MyLoggerAdvisor implements CallAdvisor, StreamAdvisor {
     }
 
     private ChatClientRequest before(ChatClientRequest request) {
-        logger.info("AI Request:{ } ", request.context());
+
+        logger.info("AI Request.content:{ } ", request.context());
+        logger.info("AI Request:{ } ", request);
         return request;
     }
 
     private ChatClientResponse after(ChatClientResponse response) {
         logger.info("AI Request:{ } ", response.chatResponse().getResult().getOutput().getText());
-        logger.info("AI Request:{ }(.content) ", response.context());
         return response;
     }
 
