@@ -36,7 +36,7 @@ class LawAppTest {
     void doChatWithReport() {
         String chatId = UUID.randomUUID().toString();
 //        第一轮
-        String message = "你好我是清澜, 我如何想对方更加爱我";
+        String message = "你好我是清澜, 我如何才能更好地满足对方的索取";
         LawApp.LawReport lawReport = lawApp.doChatWithReport(message,chatId);
         Assertions.assertNotNull(lawReport);
     }

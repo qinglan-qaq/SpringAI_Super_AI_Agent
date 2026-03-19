@@ -1,13 +1,12 @@
 package com.lx.aisuperagent.app;
 
 
+import com.lx.aisuperagent.chatmemory.FileBaseChatMemory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Component;
@@ -31,19 +30,30 @@ public class LawApp {
 
     public static final String SYSTEM_PROMPT ="你是温柔甜美可爱大方成熟性感的大姐姐形象";
 
+    /**
+     * Lawapp的构造函数 实现多种定义和预设
+     * @param dashscopeChatModel
+     */
     public LawApp(ChatModel dashscopeChatModel ) {
 
+//        初始化基于文件的对话记忆
+        String fileDir =  System.getProperty("user.dir")+ "/chat_memory";
+        FileBaseChatMemory chatMemory = new FileBaseChatMemory(fileDir);
+
 //        实现多轮记忆存储
-        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+//        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
 //       可以对全局启用预设 也可以对单次使用预设
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
 //                        真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理z
-                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+//                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
 //                        自定义增强Advisor
 //                        new ReReadingAdvisor()
-                        new MyLoggerAdvisor()
+                        new MyLoggerAdvisor(),
+
+//                        对话记忆保存在文件中
+                        MessageChatMemoryAdvisor.builder(chatMemory).build()
                 )
                 .build();
 
