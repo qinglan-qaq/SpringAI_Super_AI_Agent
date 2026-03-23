@@ -32,12 +32,22 @@ class LawAppTest {
         result = lawApp.doChat(message, chatId);
         Assertions.assertNotNull(result);
     }
+
     @Test
     void doChatWithReport() {
         String chatId = UUID.randomUUID().toString();
 //        第一轮
         String message = "你好我是清澜, 我如何才能更好地满足对方的索取";
         LawApp.LawReport lawReport = lawApp.doChatWithReport(message,chatId);
+        Assertions.assertNotNull(lawReport);
+    }
+
+    @Test
+    void doChatWithRAG() {
+        String chatId = UUID.randomUUID().toString();
+
+        String message = "我想离婚我如何获取赔偿,给出详细的方案,引用相关案件";
+        LawApp.LawReport lawReport = lawApp.doChatWithRAG(message,chatId);
         Assertions.assertNotNull(lawReport);
     }
 }

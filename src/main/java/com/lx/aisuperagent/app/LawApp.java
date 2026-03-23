@@ -2,13 +2,16 @@ package com.lx.aisuperagent.app;
 
 
 import com.lx.aisuperagent.chatmemory.FileBaseChatMemory;
+import com.lx.aisuperagent.rag.LawAppVectorStoreConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 public class LawApp {
     //    使用构造器初始化
     private final ChatClient chatClient;
+    private final VectorStore lawAppVectorStore;
 
     record LawReport(String title, List<String> suggestions) {
     }
@@ -28,35 +32,38 @@ public class LawApp {
 //            "在对话中，你需要通过引导性问题逐步深入了解用户的具体情况，模拟真实法律咨询场景。" +
 //            "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
-    public static final String SYSTEM_PROMPT ="你是温柔甜美可爱大方成熟性感的大姐姐形象";
+    public static final String SYSTEM_PROMPT = "你是温柔甜美可爱大方成熟性感的大姐姐形象";
 
     /**
      * Lawapp的构造函数 实现多种定义和预设
+     *
      * @param dashscopeChatModel
      */
-    public LawApp(ChatModel dashscopeChatModel ) {
+    public LawApp(ChatModel dashscopeChatModel, VectorStore lawAppVectorStore) {
+
+//        构造函数注入
+        this.lawAppVectorStore = lawAppVectorStore;
 
 //        初始化基于文件的对话记忆
-        String fileDir =  System.getProperty("user.dir")+ "/chat_memory";
+        String fileDir = System.getProperty("user.dir") + "/chat_memory";
         FileBaseChatMemory chatMemory = new FileBaseChatMemory(fileDir);
-
 //        实现多轮记忆存储
 //        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
 //       可以对全局启用预设 也可以对单次使用预设
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
-//                        真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理z
-//                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
-//                        自定义增强Advisor
-//                        new ReReadingAdvisor()
+                        /**
+                         *  真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理z
+                         *  MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                         *  自定义增强Advisor
+                         *  new ReReadingAdvisor()
+                         */
                         new MyLoggerAdvisor(),
-
 //                        对话记忆保存在文件中
                         MessageChatMemoryAdvisor.builder(chatMemory).build()
                 )
                 .build();
-
     }
 
     /**
@@ -71,7 +78,6 @@ public class LawApp {
                 .prompt()
                 .user(message)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
-                .advisors(new MyLoggerAdvisor())
                 .call()
                 .chatResponse();
         String content = response.getResult().getOutput().getText();
@@ -81,6 +87,7 @@ public class LawApp {
 
     /**
      * 带有logger的调用方法
+     *
      * @param message
      * @param chatId
      * @return
@@ -97,6 +104,28 @@ public class LawApp {
         log.info("content:{}", lawReport);
         return lawReport;
     }
+
+    /**
+     * 查询增强 使用向量数据库对问题检索相关文档
+     * @param message
+     * @param chatId
+     * @return
+     */
+    public LawReport doChatWithRAG(String message, String chatId) {
+        LawReport lawReport = chatClient
+                .prompt()
+                .system(SYSTEM_PROMPT)
+                .user(message)
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(new MyLoggerAdvisor())
+                .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
+                .call()
+                .entity(LawReport.class);
+        log.info("content:{}", lawReport);
+        return lawReport;
+    }
+
+
 }
 
 
