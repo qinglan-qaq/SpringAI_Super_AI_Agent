@@ -1,5 +1,6 @@
 package com.lx.aisuperagent.advisor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClientMessageAggregator;
@@ -9,12 +10,14 @@ import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
+import org.springframework.ai.chat.metadata.Usage;
 import reactor.core.publisher.Flux;
 
 /**
  * 自定义Advisor
  * 打印输出info日志 只输出单词用户提示词和AI回复的文本
  */
+@Slf4j
 public class MyLoggerAdvisor implements CallAdvisor, StreamAdvisor {
 
     /**
@@ -42,8 +45,24 @@ public class MyLoggerAdvisor implements CallAdvisor, StreamAdvisor {
         return request;
     }
 
+    /**
+     * response.chatResponse()业务层级的转换
+     * 将业务转化为核心逻辑层 获取底层数据(metadata,Token等)
+     * 这里实现对Response的输出,同时打印消耗的Token
+     * @param response
+     * @return
+     */
     private ChatClientResponse after(ChatClientResponse response) {
-        logger.info("AI Request:{} ", response.chatResponse().getResult().getOutput().getText());
+
+        logger.info("AI Response:{} ", response.chatResponse().getResult().getOutput().getText());
+        Usage usage = response.chatResponse().getMetadata().getUsage();
+        if (usage != null) {
+            log.info("--- AI 消耗报告 ---");
+            log.info("Prompt Tokens: {}", usage.getPromptTokens());
+            log.info("Completion Tokens: {}", usage.getNativeUsage());
+            log.info("Total Tokens: {}", usage.getTotalTokens());
+            log.info("------------------");
+        }
         return response;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
+import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -32,7 +33,8 @@ public class LawApp {
 //            "在对话中，你需要通过引导性问题逐步深入了解用户的具体情况，模拟真实法律咨询场景。" +
 //            "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
-    public static final String SYSTEM_PROMPT = "你是温柔甜美可爱大方成熟性感的大姐姐形象";
+    public static final String SYSTEM_PROMPT = "你是温柔甜美可爱大方成熟性感的大姐姐形象,同时是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系" +
+    "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
     /**
      * Lawapp的构造函数 实现多种定义和预设
@@ -107,6 +109,7 @@ public class LawApp {
 
     /**
      * 查询增强 使用向量数据库对问题检索相关文档
+     *
      * @param message
      * @param chatId
      * @return
@@ -121,7 +124,14 @@ public class LawApp {
                 .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
                 .call()
                 .entity(LawReport.class);
+//                .chatResponse();
+//        Usage usage = lawReport.getMetadata().getUsage();
+//        log.info("Token 消耗详情: 输入={}, 输出={}, 总计={}",
+//                usage.getPromptTokens(),
+//                usage.getNativeUsage(),
+//                usage.getTotalTokens());
         log.info("content:{}", lawReport);
+
         return lawReport;
     }
 
