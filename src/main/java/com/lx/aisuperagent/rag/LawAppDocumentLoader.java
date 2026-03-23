@@ -41,15 +41,15 @@ public class LawAppDocumentLoader {
                         .withIncludeBlockquote(false)
 //                        将文件名作为metadata元数据
                         .withAdditionalMetadata("filename", fileName)
+//                        将标题作为metadata元数据
+                        .withAdditionalMetadata("title", title)
                         .build();
                 MarkdownDocumentReader markdownDocumentReader = new MarkdownDocumentReader(resource, config);
                 allDocuments.addAll(markdownDocumentReader.get());
             }
-
         } catch (Exception e) {
             log.error("Markdown文档加载失败", e);
         }
-
         return allDocuments;
     }
 

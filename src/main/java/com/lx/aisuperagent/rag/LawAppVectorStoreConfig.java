@@ -17,6 +17,11 @@ public class LawAppVectorStoreConfig {
     @Resource
     private LawAppDocumentLoader lawAppDocumentLoader;
 
+    /**
+     * 注意这里Bean容器需要注入
+     * @param dashscopeEmbeddingModel
+     * @return
+     */
     @Bean
     VectorStore lawAppVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel)
