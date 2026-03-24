@@ -1,9 +1,10 @@
 package com.lx.aisuperagent;
 
+import com.lx.aisuperagent.rag.PgVectorVectorStoreConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = PgVectorVectorStoreConfig.class)
 public class AiSuperAgentApplication {
 
     public static void main(String[] args) {
@@ -11,3 +12,5 @@ public class AiSuperAgentApplication {
     }
 
 }
+
+

@@ -1,9 +1,6 @@
 package com.lx.aisuperagent.rag;
 
-
-import com.alibaba.cloud.ai.dashscope.api.DashScopeAgentApi;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
-import com.alibaba.cloud.ai.dashscope.rag.DashScopeDocumentRetrievalAdvisor;
 import com.alibaba.cloud.ai.dashscope.rag.DashScopeDocumentRetriever;
 import com.alibaba.cloud.ai.dashscope.rag.DashScopeDocumentRetrieverOptions;
 import lombok.extern.slf4j.Slf4j;
@@ -17,22 +14,28 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LawAppRAGCloudAdvisorConfig {
 
-    @Value("${spring.ai.dashscop.api.key}")
+    @Value("${spring.ai.dashscope.api.key}")
     private String dashscopeApiKey;
 
     @Bean
     public Advisor lawAppRAGCloudAdvisor() {
-        DashScopeApi dashScopeApi = new DashScopeApi(dashscopeApiKey);
+        // 1. 使用构建器创建 DashScopeApi（根据实际 API 调整）
+        DashScopeApi dashScopeApi = DashScopeApi.builder()
+                .apiKey(dashscopeApiKey)
+                .build();
 
         final String KNOWLEDGE_INDEX = "RAG云知识库";
-        DashScopeDocumentRetrievalAdvisor documentRetriever = new DashScopeDocumentRetriever(
+
+        // 2. 创建文档检索器（类型为 DashScopeDocumentRetriever）
+        DashScopeDocumentRetriever documentRetriever = new DashScopeDocumentRetriever(
                 dashScopeApi,
                 DashScopeDocumentRetrieverOptions.builder()
                         .withIndexName(KNOWLEDGE_INDEX)
                         .build());
+
+        // 3. 构建 RAG 顾问（Advisor）
         return RetrievalAugmentationAdvisor.builder()
                 .documentRetriever(documentRetriever)
                 .build();
     }
-
 }

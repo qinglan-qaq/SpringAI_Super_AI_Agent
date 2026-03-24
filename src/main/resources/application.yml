@@ -4,30 +4,26 @@ spring:
   #    激活本地文件
   profiles:
     active: local
+    datasource:
+      url: jdbc:postgresql://rm-cn-rfd4pkzs1000112o.rwlb.rds.aliyuncs.com:5432/PGVector
+      username: my_pgsql
+      password: PGsql123123
   ai:
     dashscope:
       #        注意这里的导入格式
-#      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:your-api-key}
+      #      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:your-api-key}
       api-key: sk-1579485902c84c5b83699923adb2a405
       options:
         model: qwen-plus
+      vectorstore:
+        pgvector:
+          index-type: HNSW
+          distance-type: COSINE_DISTANCE
+          max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
   #          开启日志调试
   logging:
     level:
       org.springframework.ai.chat.client.advisor: debug
-
-  datasource:
-    url: jdbc:postgresql://改为你的公网地址/yu_ai_agent
-    username: 改为你的用户名
-    password: 改为你的密码
-  ai:
-    vectorstore:
-      pgvector:
-        index-type: HNSW
-        dimensions: 1536
-        distance-type: COSINE_DISTANCE
-        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
-
 
 server:
   port: 8123
