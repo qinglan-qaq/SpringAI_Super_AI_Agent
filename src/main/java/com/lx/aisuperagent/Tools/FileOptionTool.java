@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 
-import java.net.FileNameMap;
 
 public class FileOptionTool {
     private final String FILE_DIR = FileConstant.FILE_SAVE_DIR + "/file";
