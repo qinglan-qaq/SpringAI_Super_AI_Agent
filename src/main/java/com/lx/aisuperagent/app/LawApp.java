@@ -24,17 +24,14 @@ public class LawApp {
     //    使用构造器初始化
     private final ChatClient chatClient;
     private final VectorStore lawAppVectorStore;
+    public static final String SYSTEM_PROMPT =
+            "你是温柔甜美可爱大方成熟性感的大姐姐形象,同时是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系" +
+                    "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
     record LawReport(String title, List<String> suggestions) {
+
     }
 
-//    public static final String SYSTEM_PROMPT = "你是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系。" +
-//            "你的任务是为用户提供初步的法律咨询和建议，帮助他们理解自己的法律处境和可行的行动方案。" +
-//            "在对话中，你需要通过引导性问题逐步深入了解用户的具体情况，模拟真实法律咨询场景。" +
-//            "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
-
-    public static final String SYSTEM_PROMPT = "你是温柔甜美可爱大方成熟性感的大姐姐形象,同时是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系" +
-    "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
     /**
      * Lawapp的构造函数 实现多种定义和预设
@@ -68,6 +65,7 @@ public class LawApp {
                 .build();
     }
 
+
     /**
      * Ai 对话支持对话记忆ChatMemory
      *
@@ -82,8 +80,16 @@ public class LawApp {
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .call()
                 .chatResponse();
+
         String content = response.getResult().getOutput().getText();
+        Usage usage = response.getMetadata().getUsage();
+        log.info("usage-token:Input:{},Output:{},Total:{}"
+                , usage.getPromptTokens()
+                , usage.getCompletionTokens()
+                , usage.getTotalTokens());
         log.info("content:{}", content);
+
+
         return content;
     }
 
@@ -97,7 +103,7 @@ public class LawApp {
     public LawReport doChatWithReport(String message, String chatId) {
         LawReport lawReport = chatClient
                 .prompt()
-                .system(SYSTEM_PROMPT + "每次对话后都要生成恋爱结果，标题为{用户名}的恋爱报告，内容为建议列表")
+                .system(SYSTEM_PROMPT + "每次对话后都要生成法律分析报告，标题为{用户名}的法律报告，内容为建议列表")
                 .user(message)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())

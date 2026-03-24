@@ -40,5 +40,5 @@ knife4j:
     language: zh_cn
 logging:
   level:
-    org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor: info
-    com.lx.aisuperagent.advisor.MyLoggerAdvisor: info
+    org.springframework.ai: INFO
+    com.lx.aisuperagent.advisor.MyLoggerAdvisor: INFO

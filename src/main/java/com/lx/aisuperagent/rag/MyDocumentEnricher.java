@@ -2,10 +2,10 @@ package com.lx.aisuperagent.rag;
 
 
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.model.transformer.KeywordMetadataEnricher;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.Document;
 import java.util.List;
 
 @Component
