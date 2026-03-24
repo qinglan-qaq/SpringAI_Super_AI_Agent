@@ -16,6 +16,19 @@ spring:
     level:
       org.springframework.ai.chat.client.advisor: debug
 
+  datasource:
+    url: jdbc:postgresql://改为你的公网地址/yu_ai_agent
+    username: 改为你的用户名
+    password: 改为你的密码
+  ai:
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        dimensions: 1536
+        distance-type: COSINE_DISTANCE
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+
+
 server:
   port: 8123
   servlet:
@@ -42,3 +55,4 @@ logging:
   level:
     org.springframework.ai: INFO
     com.lx.aisuperagent.advisor.MyLoggerAdvisor: INFO
+
