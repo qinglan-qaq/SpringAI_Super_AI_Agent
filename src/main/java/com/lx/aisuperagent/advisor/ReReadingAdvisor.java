@@ -28,6 +28,12 @@ public class ReReadingAdvisor implements BaseAdvisor {
         this.re2AdviseTemplate = re2AdviseTemplate;
     }
 
+    /**
+     *
+     * @param chatClientRequest
+     * @param advisorChain
+     * @return
+     */
     @Override
     public ChatClientRequest before(ChatClientRequest chatClientRequest, AdvisorChain advisorChain) {
         String augmentedUserText = PromptTemplate.builder()

@@ -1,18 +1,21 @@
 spring:
   application:
     name: ai-super-agent
-  #    激活本地文件
+  # 激活本地配置文件
   profiles:
     active: local
-    datasource:
-      url: jdbc:postgresql://rm-cn-rfd4pkzs1000112o.rwlb.rds.aliyuncs.com:5432/PGVector
-      username: my_pgsql
-      password: PGsql123123
+
+  datasource:
+    url: jdbc:postgresql://rm-cn-rfd4pkzs1000112o.rwlb.rds.aliyuncs.com:5432/PGVector
+    username: my_pgsql
+    password: PGsql123123
+    driver-class-name: org.postgresql.Driver
+
+  # AI 相关配置
   ai:
     dashscope:
-      #        注意这里的导入格式
-      #      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:your-api-key}
-      api-key: sk-1579485902c84c5b83699923adb2a405
+      # 注意这里的导入格式
+      api-key: ${SPRING_AI_DASHSCOPE_API_KEY:}
       options:
         model: qwen-plus
       vectorstore:
@@ -20,11 +23,8 @@ spring:
           index-type: HNSW
           distance-type: COSINE_DISTANCE
           max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
-  #          开启日志调试
-  logging:
-    level:
-      org.springframework.ai.chat.client.advisor: debug
 
+#服务器配置
 server:
   port: 8123
   servlet:
@@ -42,13 +42,16 @@ springdoc:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan: com.lx.aisuperagent.controller
+
 # knife4j
 knife4j:
   enable: true
   setting:
     language: zh_cn
+
+#开启日志调试
 logging:
   level:
-    org.springframework.ai: INFO
-    com.lx.aisuperagent.advisor.MyLoggerAdvisor: INFO
+    org.springframework.ai.chat.client.advisor: INFO
+    org.springframework.jdbc: INFO
 
