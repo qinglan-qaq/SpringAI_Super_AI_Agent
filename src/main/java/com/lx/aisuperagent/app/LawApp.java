@@ -3,9 +3,11 @@ package com.lx.aisuperagent.app;
 
 import com.lx.aisuperagent.chatmemory.FileBaseChatMemory;
 import com.lx.aisuperagent.rag.LawAppVectorStoreConfig;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
@@ -126,6 +128,41 @@ public class LawApp {
                 .user(message)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
+                .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
+                .call()
+                .chatResponse();
+        Usage usage = lawReport.getMetadata().getUsage();
+        log.info("Token 消耗详情: 输入={}, 输出={}, 总计={}",
+                usage.getPromptTokens(),
+                usage.getNativeUsage(),
+                usage.getTotalTokens());
+        log.info("content:{}", lawReport);
+
+        return lawReport;
+    }
+
+
+    /**
+     * 使用云知识库
+     * @param message
+     * @param chatId
+     * @return
+     */
+
+    //注意Bean容器的注入
+    @Resource
+    private Advisor lawAppRAGCloudAdvisor;
+
+    public ChatResponse doChatWithCloudRAG(String message, String chatId) {
+
+        ChatResponse lawReport = chatClient
+                .prompt()
+                .system(SYSTEM_PROMPT)
+                .user(message)
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(new MyLoggerAdvisor())
+//                使用云知识库
+                .advisors(lawAppRAGCloudAdvisor)
                 .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
                 .call()
                 .chatResponse();

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LawAppRAGCloudAdvisorConfig {
 
+//    环境变量赋值
     @Value("${spring.ai.dashscope.api-key}")
     private String dashscopeApiKey;
 
@@ -23,8 +24,8 @@ public class LawAppRAGCloudAdvisorConfig {
         DashScopeApi dashScopeApi = DashScopeApi.builder()
                 .apiKey(dashscopeApiKey)
                 .build();
-
-        final String KNOWLEDGE_INDEX = "RAG云知识库";
+        //      云知识库名称
+        final String KNOWLEDGE_INDEX = "RAG_法务案例";
 
         // 2. 创建文档检索器（类型为 DashScopeDocumentRetriever）
         DashScopeDocumentRetriever documentRetriever = new DashScopeDocumentRetriever(
