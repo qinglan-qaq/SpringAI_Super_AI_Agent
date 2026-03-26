@@ -1,6 +1,5 @@
-package com.lx.aisuperagent.rag;
+package com.lx.aisuperagent.rag.config;
 
-import com.alibaba.cloud.ai.dashscope.spec.DashScopeModel;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;

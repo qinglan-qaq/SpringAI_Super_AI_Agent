@@ -2,7 +2,6 @@ package com.lx.aisuperagent.app;
 
 
 import com.lx.aisuperagent.chatmemory.FileBaseChatMemory;
-import com.lx.aisuperagent.rag.LawAppVectorStoreConfig;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
