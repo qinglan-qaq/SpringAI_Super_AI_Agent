@@ -32,7 +32,6 @@ public class LawApp {
 
     }
 
-
     /**
      * Lawapp的构造函数 实现多种定义和预设
      *
@@ -120,8 +119,8 @@ public class LawApp {
      * @param chatId
      * @return
      */
-    public LawReport doChatWithRAG(String message, String chatId) {
-        LawReport lawReport = chatClient
+    public ChatResponse doChatWithRAG(String message, String chatId) {
+        ChatResponse lawReport = chatClient
                 .prompt()
                 .system(SYSTEM_PROMPT)
                 .user(message)
@@ -129,13 +128,12 @@ public class LawApp {
                 .advisors(new MyLoggerAdvisor())
                 .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
                 .call()
-                .entity(LawReport.class);
-//                .chatResponse();
-//        Usage usage = lawReport.getMetadata().getUsage();
-//        log.info("Token 消耗详情: 输入={}, 输出={}, 总计={}",
-//                usage.getPromptTokens(),
-//                usage.getNativeUsage(),
-//                usage.getTotalTokens());
+                .chatResponse();
+        Usage usage = lawReport.getMetadata().getUsage();
+        log.info("Token 消耗详情: 输入={}, 输出={}, 总计={}",
+                usage.getPromptTokens(),
+                usage.getNativeUsage(),
+                usage.getTotalTokens());
         log.info("content:{}", lawReport);
 
         return lawReport;

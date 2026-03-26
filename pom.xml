@@ -172,11 +172,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-pgvector-store -->
         <dependency>
             <groupId>org.springframework.ai</groupId>

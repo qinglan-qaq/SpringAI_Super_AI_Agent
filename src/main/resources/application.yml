@@ -4,13 +4,6 @@ spring:
   # 激活本地配置文件
   profiles:
     active: local
-
-  datasource:
-    url: jdbc:postgresql://rm-cn-rfd4pkzs1000112o.rwlb.rds.aliyuncs.com:5432/PGVector
-    username: my_pgsql
-    password: PGsql123123
-    driver-class-name: org.postgresql.Driver
-
   # AI 相关配置
   ai:
     dashscope:
@@ -23,6 +16,32 @@ spring:
           index-type: HNSW
           distance-type: COSINE_DISTANCE
           max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+  datasource:
+    url: jdbc:postgresql://rm-cn-rfd4pkzs1000112o.rwlb.rds.aliyuncs.com:5432/PG_Vector_ai
+    username: my_pgsql
+    password: PGsql123123
+    driver-class-name: org.postgresql.Driver
+
+#    MCP相关配置
+    mcp:
+      client:
+        enabled: true
+        name: my-mcp-client
+        version: 1.0.0
+        request-timeout: 30s
+        type: SYNC
+        sse:
+          connections:
+            server1:
+              url: http://localhost:8080
+        stdio:
+          connections:
+            server1:
+              command: /path/to/server
+              args:
+                - --port=8080
+              env:
+                API_KEY: your-api-key
 
 #服务器配置
 server:

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LawAppRAGCloudAdvisorConfig {
 
-    @Value("${spring.ai.dashscope.api.key}")
+    @Value("${spring.ai.dashscope.api-key}")
     private String dashscopeApiKey;
 
     @Bean

@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
@@ -46,8 +47,8 @@ class LawAppTest {
     void doChatWithRAG() {
         String chatId = UUID.randomUUID().toString();
 
-        String message = "我想离婚我如何获取赔偿,给出详细的方案,引用相关案件";
-        LawApp.LawReport lawReport = lawApp.doChatWithRAG(message,chatId);
+        String message = "我想离婚,我如何获取赔偿,给出详细的方案,引用相关案件";
+        ChatResponse lawReport = lawApp.doChatWithRAG(message,chatId);
         Assertions.assertNotNull(lawReport);
     }
 }
