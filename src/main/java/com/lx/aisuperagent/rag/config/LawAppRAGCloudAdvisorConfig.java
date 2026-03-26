@@ -25,7 +25,7 @@ public class LawAppRAGCloudAdvisorConfig {
                 .apiKey(dashscopeApiKey)
                 .build();
         //      云知识库名称
-        final String KNOWLEDGE_INDEX = "RAG_法务案例";
+        final String KNOWLEDGE_INDEX = "私人AI法务";
 
         // 2. 创建文档检索器（类型为 DashScopeDocumentRetriever）
         DashScopeDocumentRetriever documentRetriever = new DashScopeDocumentRetriever(
