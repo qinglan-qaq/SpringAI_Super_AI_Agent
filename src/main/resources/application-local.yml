@@ -9,5 +9,5 @@ spring:
             model: qwen-plus
 # searchApi
 search-api:
-  api-key: 87bbecc0dcc073d0328421cd3a5620298ffcd8af6809704eb7836050652e1fb8
+  api-key: c5083e75c47469db84f0f8bc64e955e53cf5b9763f18db0e7992006c6e23a57b
 
