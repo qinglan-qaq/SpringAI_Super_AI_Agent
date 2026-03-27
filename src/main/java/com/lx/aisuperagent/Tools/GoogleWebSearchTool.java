@@ -57,11 +57,11 @@ public class GoogleWebSearchTool {
      * @param searchQuery 搜索内容
      * @return 搜索结果摘要列表
      */
-    @Tool(description = "使用 SerpApi 提供的 Google 搜索功能进行网络搜索")
+    @Tool(description = "Use the Google search function provided by SerpApi to perform web searches.")
     public String googleSearch(
-            @ToolParam(description = "搜索内容")
+            @ToolParam(description = "Search content")
             String searchQuery) {
-        log.info("调用 SerpApi Google 搜索关键词：{}", searchQuery);
+        log.info("Calling SerpApi to search Google keywords: {}", searchQuery);
 
         try {
             // 1. 构建请求 URL（使用 GET 查询参数）
@@ -70,7 +70,11 @@ public class GoogleWebSearchTool {
                     .append("&engine=google")
                     .append("&api_key=").append(serpApiKey);
 
-            // 添加可选参数（如果配置了且非空）
+            /**
+             *  添加可选参数（如果配置了且非空）
+             *  确保编码正确UTF-8
+             *  多个if 条件独立 便于维护
+             */
             if (location != null && !location.trim().isEmpty()) {
                 urlBuilder.append("&location=").append(java.net.URLEncoder.encode(location, "UTF-8"));
             }
@@ -85,7 +89,7 @@ public class GoogleWebSearchTool {
             }
 
             String url = urlBuilder.toString();
-            log.debug("请求 URL: {}", url);
+            log.debug("Request URL: {}", url);
 
             // 2. 发送 GET 请求
             HttpResponse response = HttpRequest.get(url).execute();
@@ -93,7 +97,7 @@ public class GoogleWebSearchTool {
             // 3. 获取响应状态码和内容
             int status = response.getStatus();
             String body = response.body();
-
+            //成功响应且回复主体不为空
             if (status == 200 && ObjectUtil.isNotEmpty(body)) {
                 JSONObject jsonResponse = JSONUtil.parseObj(body);
 
@@ -111,7 +115,7 @@ public class GoogleWebSearchTool {
                         String link = result.getStr("link");
                         String snippet = result.getStr("snippet"); // 可能为空
 
-                        resultBuilder.append("【结果 ").append(index++).append("】\n");
+                        resultBuilder.append("[结果 ").append(index++).append("]\n");
                         resultBuilder.append("标题: ").append(title).append("\n");
                         resultBuilder.append("链接: ").append(link).append("\n");
                         resultBuilder.append("摘要: ").append(ObjectUtil.defaultIfNull(snippet, "无摘要信息")).append("\n\n");
