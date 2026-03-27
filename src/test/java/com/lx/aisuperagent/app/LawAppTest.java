@@ -60,4 +60,12 @@ class LawAppTest {
         Assertions.assertNotNull(lawReport);
 
     }
+
+    @Test
+    void doChatWithMcp() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "我想在长沙开福区附近玩,有什么推荐的地方吗?";
+        String chatWithMcp = lawApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(chatWithMcp);
+    }
 }

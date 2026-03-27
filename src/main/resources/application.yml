@@ -16,13 +16,40 @@ spring:
           index-type: HNSW
           distance-type: COSINE_DISTANCE
           max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+#   mcp配置
+    mcp:
+      client:
+        stdio:
+          servers-configuration:
+          classpath: mcp-servers.json
+          connections:
+            server1:
+              command: /path/to/server
+              args:
+                - --port=8080
+              env:
+#                API_KEY: ${AMAP_API_KEY:}
+                API_KEY: c5083e75c47469db84f0f8bc64e955e53cf5b9763f18db0e7992006c6e23a57b
+
+          enabled: true
+          name: my-mcp-client
+          version: 1.0.0
+          request-timeout: 30s
+          type: SYNC
+          sse:
+            connections:
+              server1:
+                url: http://localhost:8080
+
+
+
   datasource:
     url: jdbc:postgresql://rm-cn-rfd4pkzs1000112o.rwlb.rds.aliyuncs.com:5432/PG_Vector_ai
     username: my_pgsql
     password: PGsql123123
     driver-class-name: org.postgresql.Driver
 
-#    MCP相关配置
+    #    MCP相关配置
     mcp:
       client:
         enabled: true
@@ -76,5 +103,5 @@ logging:
 
 # searchApi
 search-api:
-    api-key: ${SERPAPI_API_KEY:}
+  api-key: ${SERPAPI_API_KEY:}
 
