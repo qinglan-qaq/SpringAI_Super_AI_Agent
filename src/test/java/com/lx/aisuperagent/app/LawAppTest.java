@@ -56,7 +56,7 @@ class LawAppTest {
     void doChatWithCloudRAG() {
         String chatId = UUID.randomUUID().toString();
         String message = "我想离婚,我老婆在外边有人了有相关历史案例吗";
-        ChatResponse lawReport = lawApp.doChatWithRAG(message,chatId);
+        ChatResponse lawReport = lawApp.doChatWithCloudRAG(message,chatId);
         Assertions.assertNotNull(lawReport);
 
     }

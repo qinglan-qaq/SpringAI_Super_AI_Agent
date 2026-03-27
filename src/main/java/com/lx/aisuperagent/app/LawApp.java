@@ -37,10 +37,11 @@ public class LawApp {
      * Lawapp的构造函数 实现多种定义和预设
      *
      * @param dashscopeChatModel
+     * @param lawAppVectorStore
      */
     public LawApp(ChatModel dashscopeChatModel, VectorStore lawAppVectorStore) {
 
-//        构造函数注入
+//        向量数据库构造函数注入
         this.lawAppVectorStore = lawAppVectorStore;
 
 //        初始化基于文件的对话记忆
@@ -81,20 +82,20 @@ public class LawApp {
                 .call()
                 .chatResponse();
 
-        String content = response.getResult().getOutput().getText();
         Usage usage = response.getMetadata().getUsage();
         log.info("usage-token:Input:{},Output:{},Total:{}"
                 , usage.getPromptTokens()
                 , usage.getCompletionTokens()
                 , usage.getTotalTokens());
-        log.info("content:{}", content);
 
+        String content = response.getResult().getOutput().getText();
+        log.info("content:{}", content);
 
         return content;
     }
 
     /**
-     * 带有logger的调用方法
+     * 带有MyLoggerAdvisor的调用方法
      *
      * @param message
      * @param chatId
@@ -128,8 +129,10 @@ public class LawApp {
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
                 .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
+
                 .call()
                 .chatResponse();
+
         Usage usage = lawReport.getMetadata().getUsage();
         log.info("Token 消耗详情: 输入={}, 输出={}, 总计={}",
                 usage.getPromptTokens(),
@@ -143,6 +146,7 @@ public class LawApp {
 
     /**
      * 使用云知识库
+     *
      * @param message
      * @param chatId
      * @return
@@ -162,7 +166,6 @@ public class LawApp {
                 .advisors(new MyLoggerAdvisor())
 //                使用云知识库
                 .advisors(lawAppRAGCloudAdvisor)
-                .advisors(QuestionAnswerAdvisor.builder(lawAppVectorStore).build())
                 .call()
                 .chatResponse();
         Usage usage = lawReport.getMetadata().getUsage();

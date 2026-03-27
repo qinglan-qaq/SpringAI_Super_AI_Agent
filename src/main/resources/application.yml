@@ -76,4 +76,5 @@ logging:
 
 # searchApi
 search-api:
-    api-key: 87bbecc0dcc073d0328421cd3a5620298ffcd8af6809704eb7836050652e1fb8
+    api-key: ${SERPAPI_API_KEY:}
+
