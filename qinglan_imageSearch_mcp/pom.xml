@@ -55,6 +55,22 @@
             <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
             <version>1.1.2</version>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-mcp-server-webmvc -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+            <version>1.1.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Source: https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.42</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

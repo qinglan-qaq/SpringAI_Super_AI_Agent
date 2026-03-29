@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: qinglan_imageSearch_mcp
+#指定激活哪一个yml文件
+  profiles:
+    active: stdio
+server:
+  port: 8127
