@@ -1,6 +1,5 @@
 package com.lx.aisuperagent.app;
 
-import com.lx.aisuperagent.TestVectorStoreConfig;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import java.util.UUID;
 
 @SpringBootTest
-@Import(TestVectorStoreConfig.class)
 public class LawAppTest {
 
     private ChatModel chatModel;

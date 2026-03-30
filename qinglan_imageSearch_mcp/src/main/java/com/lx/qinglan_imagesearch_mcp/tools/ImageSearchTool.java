@@ -65,8 +65,5 @@ public class ImageSearchTool {
                 .map(photoObj -> photoObj.getJSONObject("src"))
                 .map(photo -> photo.getStr("medium"))
                 .collect(Collectors.toList());
-
     }
-
-
 }
