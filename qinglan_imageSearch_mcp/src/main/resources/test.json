@@ -1,0 +1,28 @@
+{
+  "page": 1,
+  "per_page": 15,
+  "photos": [
+    {
+      "id": 35771810,
+      "width": 4000,
+      "height": 6000,
+      "url": "https://www.pexels.com/photo/serene-forest-scene-with-sunlight-through-trees-35771810/",
+      "photographer": "Ankit Rainloure",
+      "photographer_url": "https://www.pexels.com/@ankit-rainloure-1425442",
+      "photographer_id": 1425442,
+      "avg_color": "#303A21",
+      "src": {
+        "original": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg",
+        "large2x": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026dpr=2\u0026h=650\u0026w=940",
+        "large": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026h=650\u0026w=940",
+        "medium": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026h=350",
+        "small": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026h=130",
+        "portrait": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026fit=crop\u0026h=1200\u0026w=800",
+        "landscape": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026fit=crop\u0026h=627\u0026w=1200",
+        "tiny": "https://images.pexels.com/photos/35771810/pexels-photo-35771810.jpeg?auto=compress\u0026cs=tinysrgb\u0026dpr=1\u0026fit=crop\u0026h=200\u0026w=280"
+      },
+      "liked": false,
+      "alt": "Sunlight filtering through leaves illuminates a tranquil forest scene with lush greenery."
+    }
+  ]
+}

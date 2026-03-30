@@ -16,6 +16,9 @@ spring:
           index-type: HNSW
           distance-type: COSINE_DISTANCE
           max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+          #         关闭向量存储
+          embedding:
+            enabled: false
 #   mcp配置
     mcp:
       client:

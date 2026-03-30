@@ -1,17 +1,20 @@
 package com.lx.aisuperagent.app;
 
+import com.lx.aisuperagent.TestVectorStoreConfig;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 
 import java.util.UUID;
 
 @SpringBootTest
-class LawAppTest {
+@Import(TestVectorStoreConfig.class)
+public class LawAppTest {
 
     private ChatModel chatModel;
 
@@ -61,11 +64,14 @@ class LawAppTest {
 
     }
 
+
     @Test
     void doChatWithMcp() {
         String chatId = UUID.randomUUID().toString();
-        String message = "我想在长沙开福区附近玩,有什么推荐的地方吗?";
-        String chatWithMcp = lawApp.doChatWithMcp(message, chatId);
-        Assertions.assertNotNull(chatWithMcp);
+        // 测试图片搜索 MCP
+        String message = "帮我搜索一些哄另一半开心的图片";
+        String answer = lawApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(answer);
     }
+
 }

@@ -1,6 +1,5 @@
 package com.lx.qinglan_imagesearch_mcp.tools;
 
-import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -11,11 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class ImageSearchTools {
+public class ImageSearchTool {
 
     //    API
     public static final String API_KEY = "TDjxtCU2CCJmWMEbEuFBSaRbABi8p800O7cU7gvBETRB1s36JSlRNLED";
@@ -25,14 +23,13 @@ public class ImageSearchTools {
 
 
     @Tool(description = "search Image from web")
-    public String searchImages(@ToolParam(description = "Search Image Keywords") String query) {
+    public String searchImage(@ToolParam(description = "Search Image Keywords") String query) {
         try {
 //            字符串拼接
-            return String.join("?", searchImages(query));
+            return String.join("?", searchMediumImages(query));
 
         } catch (Exception e) {
             return "Error search Image : " + e.getMessage();
-
         }
     }
 
@@ -44,9 +41,9 @@ public class ImageSearchTools {
      * @return
      */
     public List<String> searchMediumImages(String query) {
-        //设置API和问题参数
+        //设置API和问题参数, 注意格式
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization: ", API_KEY);
+        headers.put("Authorization", "Bearer " + API_KEY);
 
         Map<String, Object> params = new HashMap<>();
         params.put("query", query);
@@ -57,6 +54,8 @@ public class ImageSearchTools {
                 .form(params)
                 .execute()
                 .body();
+//      测试输出
+//        System.out.println(response);
 
 //        解析JSON对象为字符串,在photo:src:medium中获取
         return JSONUtil.parseObj(response)

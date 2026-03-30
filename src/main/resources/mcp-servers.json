@@ -1,13 +1,15 @@
 {
   "mcpServers": {
-    "filesystem": {
-      "command": "npx",
+    "yu-image-search-mcp-server": {
+      "command": "java",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/username/Desktop",
-        "/Users/username/Downloads"
-      ]
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "qinglan_imageSearch_mcp/target/qinglan_imageSearch_mcp-0.0.1-SNAPSHOT.jar"
+      ],
+      "env": {}
     }
   }
 }

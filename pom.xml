@@ -204,7 +204,13 @@
             <scope>compile</scope>
         </dependency>
 
-
+        <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-mcp-client -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
+            <version>1.1.2</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>
