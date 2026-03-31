@@ -3,6 +3,7 @@ package com.lx.aisuperagent.agent;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.cloud.ai.dashscope.agent.DashScopeAgentOptions;
 
+import com.lx.aisuperagent.agent.model.AgentState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +30,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ToolCallAgent extends ReActAgent {
 
-    //    可用的工具列表
+    //      可用的工具列表
     private final ToolCallback[] availableTools;
-    //保存了工具调用信息的响应
+    //      保存了工具调用信息的响应
     private ChatResponse toolCallChatResponse;
-    //工具调用管理者
+    //      工具调用管理者
     private final ToolCallingManager toolCallingManager;
-    //自己维护上下文
+    //      自己维护上下文
     private final ChatOptions chatOptions;
 
     public ToolCallAgent(ToolCallback[] availableTools) {
@@ -78,8 +79,10 @@ public class ToolCallAgent extends ReActAgent {
             //      记录提示信息
             String result = assistantMessage.getText();
             List<AssistantMessage.ToolCall> toolCallList = assistantMessage.getToolCalls();
+
             log.info(getName() + "的思考" + result);
-            log.info(getName() + "选择了" + toolCallList.size() + "个工具使用");
+            log.info("{} 选择了 {} 个工具", getName(), toolCallList != null ? toolCallList.size() : 0);
+
             String toolCallInfo = toolCallList
                     .stream()
                     .map(toolCall -> String.format("工具名称: %s,参数: %s",
@@ -88,7 +91,7 @@ public class ToolCallAgent extends ReActAgent {
                     )
                     .collect(Collectors.joining("\n"));
             log.info(toolCallInfo);
-            //  调用工具不使用时记录助手消息
+            //      调用工具不使用时记录助手消息
             if (toolCallList.isEmpty()) {
                 getMessageList().add(assistantMessage);
                 return false;
@@ -112,13 +115,13 @@ public class ToolCallAgent extends ReActAgent {
         if (!toolCallChatResponse.hasToolCalls()) {
             return "没用工具调用";
         }
-
+        //      调用工具
         Prompt prompt = new Prompt(getMessageList(), chatOptions);
 
         ToolExecutionResult toolExecutionResult = toolCallingManager.executeToolCalls(prompt, toolCallChatResponse);
-
+        //      记录上下文conversationHistory包含助手信息和返回结果
         setMessageList(toolExecutionResult.conversationHistory());
-
+        //      当前工具调用的结果
         ToolResponseMessage toolResponseMessage = (ToolResponseMessage) CollUtil.getLast(toolExecutionResult.conversationHistory());
 
         String results = toolResponseMessage
@@ -126,10 +129,17 @@ public class ToolCallAgent extends ReActAgent {
                 .stream()
                 .map(response -> "工具" + response.name() + "完成了任务喵~😎😎😎成果为: " + response.responseData())
                 .collect(Collectors.joining("\n"));
+
+        //        匹配任何有执行terminate的函数, 判断是否为true,改变状态
+        boolean terminateToolCalled = toolResponseMessage.getResponses().stream()
+                .anyMatch(toolResponse -> "doTerminate".equals(toolResponse.name()));
+        if (terminateToolCalled) {
+            setState(AgentState.FINISHED);
+        }
+
+
         log.info(results);
         return results;
-
-
     }
 }
 
