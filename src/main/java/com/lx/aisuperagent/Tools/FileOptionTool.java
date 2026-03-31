@@ -6,7 +6,7 @@ import org.springframework.ai.tool.annotation.ToolParam;
 
 
 public class FileOptionTool {
-    private final String FILE_DIR = FileConstant.FILE_SAVE_DIR + "/file";
+    private final String FILE_DIR = FileConstant.FILE_SAVE_DIR;
 
     /**
      * 读取文件操作
