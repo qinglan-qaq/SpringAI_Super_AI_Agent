@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ToolRegistration {
 
-//    @Value("${search-api.api-key}")
-//    private String searchApiKey;
+    @Value("${search-api.api-key}")
+    private String searchApiKey;
 
     @Bean
     public ToolCallback[] allTools() {
         FileOptionTool fileOptionTool = new FileOptionTool();
         TerminateTool terminateTool = new TerminateTool();
-        GoogleWebSearchTool googleWebSearchTool = new GoogleWebSearchTool;
+        GoogleWebSearchTool googleWebSearchTool = new GoogleWebSearchTool(searchApiKey);
         PDFGenerationTool pdfGenerationTool = new PDFGenerationTool();
         return ToolCallbacks.from(
                 fileOptionTool,
