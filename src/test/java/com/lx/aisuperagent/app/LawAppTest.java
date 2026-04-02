@@ -72,4 +72,27 @@ public class LawAppTest {
         Assertions.assertNotNull(answer);
     }
 
+
+    private void testMessage(String message) {
+        String chatId = UUID.randomUUID().toString();
+        String answer = lawApp.doChatWithTools(message, chatId);
+        Assertions.assertNotNull(answer);
+    }
+
+
+    @Test
+    void testDoChatWithTools() {
+        // 测试联网搜索问题的答案
+        testMessage("周末想去处理婚姻纠纷的按键，推荐几个靠谱的律所？");
+
+        // 测试资源下载：图片下载
+        testMessage("直接下载一张适合做手机壁纸的自然(nature)图片为文件");
+
+        // 测试文件操作：生成文件
+        testMessage("保存我的离婚纠纷案例为文件PDF格式");
+
+        // 测试 PDF 读取
+        testMessage("读取对应的PDF文件,给出具体解释");
+
+    }
 }

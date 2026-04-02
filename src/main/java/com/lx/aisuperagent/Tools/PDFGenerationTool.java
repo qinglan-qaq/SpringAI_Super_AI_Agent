@@ -21,7 +21,7 @@ public class PDFGenerationTool {
 //            给大模型理解的参数
             @ToolParam(description = "Name of the file to save th egenenrated PDF") String fileName,
             @ToolParam(description = "content to be included in the PDF") String content) {
-        String fileDir = FileConstant.FILE_SAVE_DIR + "/pdf";
+        String fileDir = FileConstant.FILE_SAVE_DIR;
         String filePath = fileDir + "/" + fileName;
         try {
             FileUtil.mkdir(fileDir);
@@ -32,8 +32,8 @@ public class PDFGenerationTool {
                     Document document = new Document(pdf);
             ) {
                 // 使用内置中文字体
-//                PdfFont font = PdfFontFactory.createFont("STSongStd-Light", "UniGB-UCS2-H");
-//                document.setFont(font);
+                PdfFont font = PdfFontFactory.createFont("STSongStd-Light", "UniGB-UCS2-H");
+                document.setFont(font);
                 // 创建段落
                 Paragraph paragraph = new Paragraph(content);
                 // 添加段落并关闭文档

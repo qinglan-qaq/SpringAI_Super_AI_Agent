@@ -9,8 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@SpringBootTest
-@ActiveProfiles("local")
 class GoogleWebSearchToolTest {
     @Value("${search-api.api-key}")
     private String searchApi;
@@ -18,7 +16,7 @@ class GoogleWebSearchToolTest {
     @Test
     void googleSearch() {
         GoogleWebSearchTool searchTool = new GoogleWebSearchTool(searchApi);
-        String search = searchTool.googleSearch("谁是世界上最流行的歌手?");
+        String search = searchTool.googleSearch("三午自刑是什么意思?");
         log.info(search);
         assertNotNull(search);
     }

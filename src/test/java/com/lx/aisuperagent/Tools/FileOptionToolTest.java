@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * 单独的Java处理工具 不需要Spring AI的上下文支持
+ */
 class FileOptionToolTest {
 
 
