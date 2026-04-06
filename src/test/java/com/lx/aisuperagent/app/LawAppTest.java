@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.UUID;
 
+//@SpringBootTest
 @SpringBootTest
 public class LawAppTest {
 
@@ -26,7 +27,7 @@ public class LawAppTest {
         String message = "你是我结婚三年的老婆,今天是结婚纪念日";
         String result = lawApp.doChat(message, chatId);
 //        第二轮
-        message = "我下楼买点\"晚上好玩的\"(露出意味深长的表情)";
+        message = "我下楼买点喝的(露出意味深长的表情)";
         result = lawApp.doChat(message, chatId);
         Assertions.assertNotNull(result);
 //        第三轮
@@ -39,7 +40,7 @@ public class LawAppTest {
     void doChatWithReport() {
         String chatId = UUID.randomUUID().toString();
 //        第一轮
-        String message = "你好我是清澜, 我如何才能更好地满足对方的索取";
+        String message = "你好我是清澜, 我如何才能更好地满足对方的愿望";
         LawApp.LawReport lawReport = lawApp.doChatWithReport(message,chatId);
         Assertions.assertNotNull(lawReport);
     }
@@ -67,7 +68,7 @@ public class LawAppTest {
     void doChatWithMcp() {
         String chatId = UUID.randomUUID().toString();
         // 测试图片搜索 MCP
-        String message = "帮我搜索一些哄另一半开心的图片";
+        String message = "帮我搜索一些关于nature的图片";
         String answer = lawApp.doChatWithMcp(message, chatId);
         Assertions.assertNotNull(answer);
     }
@@ -83,7 +84,7 @@ public class LawAppTest {
     @Test
     void testDoChatWithTools() {
         // 测试联网搜索问题的答案
-        testMessage("周末想去处理婚姻纠纷的按键，推荐几个靠谱的律所？");
+        testMessage("周末想去处理婚姻纠纷的案件，推荐几个靠谱的律所？");
 
         // 测试资源下载：图片下载
         testMessage("直接下载一张适合做手机壁纸的自然(nature)图片为文件");

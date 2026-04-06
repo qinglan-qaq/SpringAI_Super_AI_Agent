@@ -137,7 +137,6 @@ public class ToolCallAgent extends ReActAgent {
             setState(AgentState.FINISHED);
         }
 
-
         log.info(results);
         return results;
     }

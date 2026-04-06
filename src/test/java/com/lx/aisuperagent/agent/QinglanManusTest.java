@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+// 单元测试场景下不需要启动 MCP 客户端，避免 /path/to/server 占位命令报错
 @SpringBootTest
 class QinglanManusTest {
 

@@ -167,7 +167,7 @@
             <scope>compile</scope>
         </dependency>
 
-<!--        对PGsql向量数据库的支持-->
+        <!--        对PGsql向量数据库的支持-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -205,6 +205,7 @@
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-mcp-client -->
+        <!--        启用MCP的Stdio链接模式-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client</artifactId>

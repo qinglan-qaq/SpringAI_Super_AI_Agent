@@ -2,11 +2,12 @@ spring:
   ai:
     mcp:
       server:
-        name: yu-image-search-mcp-server
+        name: qinglan_imageSearch_mcp
         version: 0.0.1
         type: SYNC
         # stdio
         stdio: true
+        enabled: true
   # stdio
   main:
     web-application-type: none

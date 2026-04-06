@@ -23,7 +23,6 @@ public class ToolRegistration {
                 terminateTool,
                 googleWebSearchTool,
                 pdfGenerationTool
-
         );
     }
 }

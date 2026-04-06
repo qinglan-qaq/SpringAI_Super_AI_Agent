@@ -15,6 +15,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -184,6 +185,7 @@ public class LawApp {
     @Resource
     private ToolCallbackProvider toolCallbackProvider;
 
+    @Tool
     public String doChatWithMcp(String message, String chatId) {
         ChatResponse response = chatClient
                 .prompt()
@@ -191,7 +193,7 @@ public class LawApp {
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
 //                启用MCP服务
-                .tools(toolCallbackProvider)
+                .toolCallbacks(toolCallbackProvider)
                 .call()
                 .chatResponse();
 
@@ -207,7 +209,7 @@ public class LawApp {
     }
 
     @Resource
-    private ToolCallbackProvider[] toolCallbacks;
+    private ToolCallbackProvider toolCallbacks;
 
     public String doChatWithTools(String message, String chatId) {
         ChatResponse response = chatClient
@@ -216,7 +218,7 @@ public class LawApp {
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
 //                启用MCP服务
-                .tools(toolCallbacks)
+                .toolCallbacks(toolCallbacks)
                 .call()
                 .chatResponse();
 
@@ -246,8 +248,6 @@ public class LawApp {
                 .stream()
                 .content();
     }
-
-
 }
 
 
