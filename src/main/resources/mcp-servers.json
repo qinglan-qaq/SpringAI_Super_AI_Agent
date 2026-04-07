@@ -10,7 +10,9 @@
         "E:/AI_Super_Agent/ai-super-agent/qinglan_imageSearch_mcp/target/qinglan_imageSearch_mcp-0.0.1-SNAPSHOT.jar",
         "--spring.profiles.active=stdio"
       ],
-      "env": {}
+      "env": {
+        "API_KEY": "c5083e75c47469db84f0f8bc64e955e53cf5b9763f18db0e7992006c6e23a57b"
+      }
     }
   }
 }

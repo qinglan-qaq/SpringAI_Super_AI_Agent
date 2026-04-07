@@ -1,0 +1,9 @@
+spring:
+  ai:
+    mcp:
+      server:
+        sse:
+          enabled: true
+          port: 8080              # SSE 监听端口，可按需修改
+  main:
+    web-application-type: servlet  # 默认 servlet 模式，可不写

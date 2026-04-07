@@ -229,7 +229,7 @@ public class LawApp {
                 usage.getTotalTokens());
 
         String content = response.getResult().getOutput().getText();
-        log.info("content:{}",content);
+        log.info("content:{}", content);
         return content;
     }
 
