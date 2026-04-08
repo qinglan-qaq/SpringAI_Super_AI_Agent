@@ -5,5 +5,6 @@ spring:
         stdio: true               # 启用 stdio 传输
         name: qinglan-image-search
         version: 1.0.0
+        servers-configuration: classpath:mcp-servers.json
   main:
     web-application-type: none    # 禁用 Web 环境（stdio 模式不需要 Web）

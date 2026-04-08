@@ -3,7 +3,14 @@ spring:
     mcp:
       server:
         sse:
+          webflux:
+            enabled: true
+            httpclient:
+              enabled: false
           enabled: true
-          port: 8080              # SSE 监听端口，可按需修改
+          port: 8127              # SSE 监听端口，可按需修改
+          connections:
+            qinglan_imageSearch_mcp:
+              url: http://localhost:8127
   main:
     web-application-type: servlet  # 默认 servlet 模式，可不写

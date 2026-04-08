@@ -3,7 +3,7 @@ spring:
     name: ai-super-agent
   # 激活本地配置文件
   profiles:
-    active: local,stdio  #需要时激活sse
+    active: local,sse  #需要时激活sse
 
   # AI 相关配置
   ai:
@@ -21,13 +21,21 @@ spring:
           distance-type: COSINE_DISTANCE
           max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
 
+
     #   mcp配置
     mcp:
       client:
         enabled: true
         request-timeout: 60s
-        stdio:
-          servers-configuration: classpath:mcp-servers.json
+        # sse链接方式
+        sse:
+          enabled: true
+          port: 8127              # SSE 监听端口，可按需修改
+          connections:
+            qinglan_imageSearch_mcp:
+              url: http://localhost:8127
+  #        stdio:
+  #          servers-configuration: classpath:mcp-servers.json
 
 
 
@@ -69,6 +77,8 @@ logging:
   level:
     org.springframework.ai.chat.client.advisor: INFO
     org.springframework.jdbc: INFO
+    org.springframework.ai.mcp: DEBUG
+    io.modelcontextprotocol: DEBUG
 
 # searchApi
 search-api:

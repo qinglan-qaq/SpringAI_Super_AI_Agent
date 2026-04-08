@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 使用Builder模式,提供了更加灵活的api接口
+ * 使用Builder模式,链式调用
+ * 提供了更加灵活的api接口
  * 能自定义更多的文档分割细节
  */
 @Component

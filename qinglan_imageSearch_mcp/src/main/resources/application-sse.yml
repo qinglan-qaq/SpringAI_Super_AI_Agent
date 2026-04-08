@@ -2,8 +2,14 @@ spring:
   ai:
     mcp:
       server:
-        name: yu-image-search-mcp-server
+        name: qinglan_imageSearch_mcp
         version: 0.0.1
-        type: SYNC
+        type: SYNC                        # 同步通信
         # sse
         stdio: false
+        sse:
+          enabled: true                   # 启用 SSE 传输
+          endpoint: /sse                  # SSE 端点路径，默认就是 /sse
+
+server:
+  port: 8127                             # 服务端口，可自行修改

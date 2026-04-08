@@ -28,6 +28,7 @@ public class AI_Controller {
     private ChatModel chatModel;
 
     @GetMapping("/law_app/chat/sync")
+//    一般的普通对话
     public String doChatWithLawLovelyAppSync(String message, String chatId) {
         return lawApp.doChat(message, chatId);
     }

@@ -13,10 +13,12 @@ import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -32,7 +34,8 @@ public class LawApp {
     public static final String SYSTEM_PROMPT =
             "你是温柔甜美可爱大方成熟性感的大姐姐形象,同时是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系" +
                     "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
-
+    //      添加对MCP工具调用
+    private final SyncMcpToolCallbackProvider toolCallbackProvider;
     record LawReport(String title, List<String> suggestions) {
 
     }
@@ -43,10 +46,13 @@ public class LawApp {
      * @param dashscopeChatModel
      * @param lawAppVectorStore
      */
-    public LawApp(ChatModel dashscopeChatModel, VectorStore lawAppVectorStore) {
+    public LawApp(ChatModel dashscopeChatModel,
+                  VectorStore lawAppVectorStore,
+                  SyncMcpToolCallbackProvider syncMcpToolCallbackProvider) {
 
 //        向量数据库构造函数注入
         this.lawAppVectorStore = lawAppVectorStore;
+        this.toolCallbackProvider = syncMcpToolCallbackProvider;
 
 //        初始化基于文件的对话记忆
         String fileDir = System.getProperty("user.dir") + "/chat_memory";
@@ -182,8 +188,10 @@ public class LawApp {
         return lawReport;
     }
 
-    @Resource
-    private ToolCallbackProvider toolCallbackProvider;
+
+    private ToolCallback[] getToolCallbacks() {
+        return toolCallbackProvider.getToolCallbacks();
+    }
 
     @Tool
     public String doChatWithMcp(String message, String chatId) {
@@ -192,7 +200,7 @@ public class LawApp {
                 .user(message)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
-//                启用MCP服务
+                //      启用MCP服务
                 .toolCallbacks(toolCallbackProvider)
                 .call()
                 .chatResponse();
@@ -208,8 +216,9 @@ public class LawApp {
         return content;
     }
 
-    @Resource
-    private ToolCallbackProvider toolCallbacks;
+
+//    @Resource
+//    private ToolCallbackProvider toolCallbacks;
 
     public String doChatWithTools(String message, String chatId) {
         ChatResponse response = chatClient
@@ -218,7 +227,7 @@ public class LawApp {
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
 //                启用MCP服务
-                .toolCallbacks(toolCallbacks)
+                .tools(toolCallbackProvider)
                 .call()
                 .chatResponse();
 

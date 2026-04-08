@@ -14,6 +14,7 @@ public class QinglanImageSearchMcpApplication {
         SpringApplication.run(QinglanImageSearchMcpApplication.class, args);
     }
 
+    //    Bean注册工具
     @Bean
     public ToolCallbackProvider imageSearchTools(ImageSearchTool imageSearchTool) {
         return MethodToolCallbackProvider.builder()

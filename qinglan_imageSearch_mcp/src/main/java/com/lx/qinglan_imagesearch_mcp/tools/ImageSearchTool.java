@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Service
 public class ImageSearchTool {
 
@@ -21,11 +22,11 @@ public class ImageSearchTool {
     //    搜索接口
     public static final String API_URL = "https://api.pexels.com/v1/search";
 
-
+    //  暴露为可用工具
     @Tool(description = "search Image from web")
     public String searchImage(@ToolParam(description = "Search Image Keywords") String query) {
         try {
-//            字符串拼接
+            //      字符串拼接
             return String.join("?", searchMediumImages(query));
 
         } catch (Exception e) {
@@ -48,16 +49,15 @@ public class ImageSearchTool {
         Map<String, Object> params = new HashMap<>();
         params.put("query", query);
 
-//        获取请求结果
+        //      获取请求结果
         String response = HttpUtil.createGet(API_URL)
                 .addHeaders(headers)
                 .form(params)
                 .execute()
                 .body();
-//      测试输出
-//        System.out.println(response);
 
-//        解析JSON对象为字符串,在photo:src:medium中获取
+
+        //        解析JSON对象为字符串,在photo:src:medium中获取
         return JSONUtil.parseObj(response)
                 .getJSONArray("photos")
                 .stream()
