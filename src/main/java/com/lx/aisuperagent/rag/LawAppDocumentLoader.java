@@ -28,6 +28,8 @@ public class LawAppDocumentLoader {
         try {
 //           获取资源 从Document路径下获取所有md文件
             Resource[] resources = resourcePatternResolver.getResources("classpath:document/*.md");
+            log.info("发现{}个MarkDown文件", resources.length);
+
             for (Resource resource : resources) {
                 String fileName = resource.getFilename();
                 String title = resource.getDescription();
@@ -44,8 +46,11 @@ public class LawAppDocumentLoader {
 //                        将标题作为metadata元数据
                         .withAdditionalMetadata("title", title)
                         .build();
+
+
                 MarkdownDocumentReader markdownDocumentReader = new MarkdownDocumentReader(resource, config);
                 allDocuments.addAll(markdownDocumentReader.get());
+                log.info("已读取所有MarkDown文件");
             }
         } catch (Exception e) {
             log.error("Markdown文档加载失败", e);

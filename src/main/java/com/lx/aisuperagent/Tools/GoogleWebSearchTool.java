@@ -61,6 +61,7 @@ public class GoogleWebSearchTool {
     public String googleSearch(
             @ToolParam(description = "Search content")
             String searchQuery) {
+
         log.info("Calling SerpApi to search Google keywords: {}", searchQuery);
 
         try {

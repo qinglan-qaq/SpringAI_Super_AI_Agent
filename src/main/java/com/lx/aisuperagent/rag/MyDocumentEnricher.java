@@ -12,8 +12,8 @@ import java.util.List;
 
 @Component
 public class MyDocumentEnricher {
-    private final ChatModel chatModel;
 
+    private final ChatModel chatModel;
 
     public MyDocumentEnricher(ChatModel chatModel) {
         this.chatModel = chatModel;

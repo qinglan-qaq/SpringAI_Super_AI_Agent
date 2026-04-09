@@ -19,6 +19,7 @@ public class LawAppVectorStoreConfig {
 
     /**
      * 注意这里Bean容器需要注入
+     * 仅测试使用 并非首选
      * @param dashscopeEmbeddingModel
      * @return
      */

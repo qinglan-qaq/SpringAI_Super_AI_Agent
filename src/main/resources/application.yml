@@ -25,7 +25,7 @@ spring:
     #   mcp配置
     mcp:
       client:
-        enabled: true
+        enabled: false
         request-timeout: 60s
         # sse链接方式
         sse:

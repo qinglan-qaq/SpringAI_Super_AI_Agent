@@ -30,12 +30,16 @@ import java.util.List;
 public class LawApp {
     //    使用构造器初始化
     private final ChatClient chatClient;
+
     private final VectorStore lawAppVectorStore;
+
     public static final String SYSTEM_PROMPT =
             "你是温柔甜美可爱大方成熟性感的大姐姐形象,同时是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系" +
                     "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
+
     //      添加对MCP工具调用
     private final SyncMcpToolCallbackProvider toolCallbackProvider;
+
     record LawReport(String title, List<String> suggestions) {
 
     }
@@ -48,17 +52,21 @@ public class LawApp {
      */
     public LawApp(ChatModel dashscopeChatModel,
                   VectorStore lawAppVectorStore,
-                  SyncMcpToolCallbackProvider syncMcpToolCallbackProvider) {
+                  @Autowired(required = false) SyncMcpToolCallbackProvider syncMcpToolCallbackProvider) {
 
 //        向量数据库构造函数注入
         this.lawAppVectorStore = lawAppVectorStore;
+
         this.toolCallbackProvider = syncMcpToolCallbackProvider;
 
 //        初始化基于文件的对话记忆
         String fileDir = System.getProperty("user.dir") + "/chat_memory";
+
         FileBaseChatMemory chatMemory = new FileBaseChatMemory(fileDir);
+
 //        实现多轮记忆存储
 //        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+
 //       可以对全局启用预设 也可以对单次使用预设
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
