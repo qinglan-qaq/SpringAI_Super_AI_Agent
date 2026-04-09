@@ -10,7 +10,6 @@ import java.util.List;
 
 public class RAG_Service {
 
-
     /**
      * RAG服务
      */
@@ -40,9 +39,8 @@ public class RAG_Service {
             List<Document> documents = documentLoader.loadMarkdowns();
             log.info("加载文档数量: {}", documents.size());
 
-            // 2. 分块
-            List<Document> chunks = textSplitter.splitWithBuilder(documents);
-
+            // 2. 使用字符递归分块
+            List<Document> chunks = textSplitter.apply(documents);
 
             log.info("分块后数量: {}", chunks.size());
 

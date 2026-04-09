@@ -13,7 +13,7 @@ import static org.springframework.ai.vectorstore.pgvector.PgVectorStore.PgIndexT
 
 /**
  * 完整的自定义PG向量数据库
- * 首先项目
+ * 优先使用该Bean
  */
 @Configuration
 public class PgVectorVectorStoreConfig {
