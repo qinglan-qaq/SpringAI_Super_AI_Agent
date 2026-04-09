@@ -46,7 +46,6 @@ public class ToolCallAgent extends ReActAgent {
         this.chatOptions = DashScopeAgentOptions.builder()
 //                .enableInternalToolExecution(false)
                 .build();
-
     }
 
     /**

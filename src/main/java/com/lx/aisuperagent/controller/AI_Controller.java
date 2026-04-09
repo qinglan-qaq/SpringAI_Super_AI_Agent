@@ -33,10 +33,6 @@ public class AI_Controller {
         return lawApp.doChat(message, chatId);
     }
 
-//    @GetMapping(value = "/law_app/chat/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public Flux<String> doChatWithLoveAppSSE(String message, String chatId) {
-//        return lawApp.doChatByStream(message, chatId);
-//    }
 
     @GetMapping(value = "/law_app/chat/sse")
     public Flux<ServerSentEvent<String>> doChatWithLoveAppSSE(String message, String chatId) {
