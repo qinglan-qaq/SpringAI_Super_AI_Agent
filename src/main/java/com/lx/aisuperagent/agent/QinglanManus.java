@@ -34,8 +34,7 @@ public class QinglanManus extends ToolCallAgent {
         // 初始化客户端  
         ChatClient chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultAdvisors(new MyLoggerAdvisor())
-                //      支持对工具的调用
-                .defaultToolCallbacks(allTools)
+
                 .build();
         this.setChatClient(chatClient);
     }

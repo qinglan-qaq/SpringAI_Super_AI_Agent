@@ -16,7 +16,7 @@ spring:
           top-p: 0.85
       embedding:
         options:
-          model: text-embedding-v2
+          model: text-embedding-v4
       vectorstore:
         pgvector:
           index-type: HNSW

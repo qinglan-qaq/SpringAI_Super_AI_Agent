@@ -1,13 +1,16 @@
 package com.lx.aisuperagent.agent;
 
+import com.lx.aisuperagent.rag.config.LawAppVectorStoreConfig;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 
 @SpringBootTest
+
 class QinglanManusTest {
 
     @Resource
@@ -21,6 +24,7 @@ class QinglanManusTest {
                 并输出为pdf文件
                 """;
         String answer = qinglanManus.run(userPrompt);
+        qinglanManus.runStream(userPrompt);
         Assertions.assertNotNull(answer);
     }
 }

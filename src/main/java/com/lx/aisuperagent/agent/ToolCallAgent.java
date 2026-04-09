@@ -3,6 +3,7 @@ package com.lx.aisuperagent.agent;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.cloud.ai.dashscope.agent.DashScopeAgentOptions;
 
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import com.lx.aisuperagent.agent.model.AgentState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -70,16 +71,21 @@ public class ToolCallAgent extends ReActAgent {
             ChatResponse chatResponse = getChatClient().prompt(prompt)
                     .system(getSystemPrompt())
                     .toolCallbacks(availableTools)
+                    .options(DashScopeChatOptions.builder().withTopP(0.85).build())
                     .call()
                     .chatResponse();
+
             //      记录响应
             this.toolCallChatResponse = chatResponse;
+
             AssistantMessage assistantMessage = chatResponse.getResult().getOutput();
             //      记录提示信息
             String result = assistantMessage.getText();
+
             List<AssistantMessage.ToolCall> toolCallList = assistantMessage.getToolCalls();
 
             log.info(getName() + "的思考" + result);
+
             log.info("{} 选择了 {} 个工具", getName(), toolCallList != null ? toolCallList.size() : 0);
 
             String toolCallInfo = toolCallList
