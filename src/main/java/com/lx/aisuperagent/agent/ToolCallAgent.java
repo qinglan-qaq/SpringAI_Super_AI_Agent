@@ -69,7 +69,7 @@ public class ToolCallAgent extends ReActAgent {
             //      配置对应的有工具调用的
             ChatResponse chatResponse = getChatClient().prompt(prompt)
                     .system(getSystemPrompt())
-                    .tools(availableTools)
+                    .toolCallbacks(availableTools)
                     .call()
                     .chatResponse();
             //      记录响应

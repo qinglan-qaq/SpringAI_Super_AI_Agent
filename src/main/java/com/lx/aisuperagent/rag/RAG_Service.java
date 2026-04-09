@@ -3,6 +3,7 @@ package com.lx.aisuperagent.rag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +66,28 @@ public class RAG_Service {
          */
         public void addDocuments(List<Document> documents) {
             pgVectorStore.add(documents);
+        }
+
+
+        /**
+         * 自定义语义查询
+         * 可以设置查询相似度阈值
+         * 返回文档数量
+         * pgVectorStore自动调用相似度查询,在数据库中检索查询
+         *
+         * @param query
+         * @param Top_K
+         * @param similarityThreshold
+         * @return
+         */
+        public List<Document> SearchWitchCustomer(String query, int Top_K, double similarityThreshold) {
+            log.info("执行高级语义查询: query={}, topK={}, threshold={}", query, Top_K, similarityThreshold);
+            SearchRequest searchRequest = SearchRequest.builder()
+                    .query(query)
+                    .topK(Top_K)
+                    .similarityThreshold(similarityThreshold)
+                    .build();
+            return pgVectorStore.similaritySearch(searchRequest);
         }
     }
 

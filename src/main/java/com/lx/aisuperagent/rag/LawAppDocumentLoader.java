@@ -26,24 +26,24 @@ public class LawAppDocumentLoader {
         List<Document> allDocuments = new ArrayList<>();
 
         try {
-//           获取资源 从Document路径下获取所有md文件
+            //           获取资源 从Document路径下获取所有md文件
             Resource[] resources = resourcePatternResolver.getResources("classpath:document/*.md");
             log.info("发现{}个MarkDown文件", resources.length);
 
             for (Resource resource : resources) {
                 String fileName = resource.getFilename();
                 String title = resource.getDescription();
-//                配置获取的参数
+                //                配置获取的参数
                 MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
-//                        新文档是否按照水平分割线划分
+                        //      新文档是否按照水平分割线划分
                         .withHorizontalRuleCreateDocument(true)
-//                        是否包含代码块的内容
+                        //      是否包含代码块的内容
                         .withIncludeCodeBlock(false)
-//                        是否包含引用块内容
+                        //      是否包含引用块内容
                         .withIncludeBlockquote(false)
-//                        将文件名作为metadata元数据
+                        //      将文件名作为metadata元数据
                         .withAdditionalMetadata("filename", fileName)
-//                        将标题作为metadata元数据
+                        //      将标题作为metadata元数据
                         .withAdditionalMetadata("title", title)
                         .build();
 

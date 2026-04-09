@@ -1,5 +1,6 @@
 package com.lx.aisuperagent.agent;
 
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
