@@ -15,7 +15,6 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class LawApp {
      */
     public LawApp(ChatModel dashscopeChatModel,
                   VectorStore lawAppVectorStore,
-                  @Autowired(required = false) SyncMcpToolCallbackProvider syncMcpToolCallbackProvider) {
+                  @Autowired(required = false)SyncMcpToolCallbackProvider syncMcpToolCallbackProvider) {
 
 //        向量数据库构造函数注入
         this.lawAppVectorStore = lawAppVectorStore;
@@ -209,7 +208,7 @@ public class LawApp {
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new MyLoggerAdvisor())
                 //      启用MCP服务
-                .toolCallbacks(toolCallbackProvider)
+                .toolCallbacks(getToolCallbacks())
                 .call()
                 .chatResponse();
 

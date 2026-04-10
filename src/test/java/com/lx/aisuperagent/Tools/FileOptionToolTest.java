@@ -13,7 +13,7 @@ class FileOptionToolTest {
     @Test
     void testReadFile() {
         FileOptionTool fileOptionTool = new FileOptionTool();
-        String fileName = "2026的运势.md";
+        String fileName = "Tools模块-思路笔记.md";
         String readFile = fileOptionTool.readFile(fileName);
         System.out.println(readFile);
         Assertions.assertNotNull(readFile);
@@ -24,7 +24,7 @@ class FileOptionToolTest {
     void testWriteFile() {
         FileOptionTool fileOptionTool = new FileOptionTool();
         String fileName = "tool测试工具.txt";
-        String content = "这里是tool文件写入测试";
+        String content = "这里是tool文件写入测试 2026年4月10日09:10:56";
         String result = fileOptionTool.writeFile(fileName,content);
         Assertions.assertNotNull(result);
     }

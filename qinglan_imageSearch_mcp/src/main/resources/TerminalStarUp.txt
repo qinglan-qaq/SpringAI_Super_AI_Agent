@@ -1,1 +1,1 @@
-java -jar "E:\AI_Super_Agent\ai-super-agent\qinglan_imageSearch_mcp\target\qinglan_imageSearch_mcp-0.0.1-SNAPSHOT.jar" --spring.profiles.active=sse --server.port=8127
+java -jar "E:\AI_Super_Agent\ai-super-agent\qinglan_imageSearch_mcp\target\qinglan_imageSearch_mcp-0.0.1-SNAPSHOT.jar" --spring.profiles.active=sse

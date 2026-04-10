@@ -19,6 +19,7 @@ public class AgentChatResponse {
     private String error;             // 错误信息
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ToolCallInfo {
