@@ -1,7 +1,7 @@
 spring:
   ai:
     mcp:
-      server:
+      client:
         sse:
           webflux:
             enabled: true

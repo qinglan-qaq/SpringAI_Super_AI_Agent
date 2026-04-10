@@ -10,6 +10,7 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -33,17 +34,20 @@ public class LawApp {
     //    使用构造器初始化
     private final ChatClient chatClient;
 
-    private final VectorStore lawAppVectorStore;
-    //注入RAG服务
-    @Resource
-    private RAG_Service.RagService ragService;
+//    private final VectorStore lawAppVectorStore; 云向量模型
+
+
     public static final String SYSTEM_PROMPT =
             "你是温柔甜美可爱大方成熟性感的大姐姐形象,同时是一个专业的法律顾问AI，名为“AI私人法务”，精通中国法律体系" +
                     "你的回答应当专业、清晰、易于理解，同时始终保持礼貌、耐心和同理心，让用户感受到被重视和支持。";
 
+    //注入RAG服务
+    @Resource
+    private RAG_Service.RagService ragService;
+
     //      添加对MCP工具调用
     private final SyncMcpToolCallbackProvider toolCallbackProvider;
-    
+
     //      本地工具作为备用方案
     private final ToolCallback[] allTools;
 
@@ -55,40 +59,42 @@ public class LawApp {
      * Lawapp的构造函数 实现多种定义和预设
      *
      * @param dashscopeChatModel
-     * @param lawAppVectorStore
+     * @param ragService
      */
     public LawApp(ChatModel dashscopeChatModel,
-                  VectorStore lawAppVectorStore,
-                  @Autowired(required = false)SyncMcpToolCallbackProvider syncMcpToolCallbackProvider,
+                  RAG_Service ragService,
+                  SyncMcpToolCallbackProvider syncMcpToolCallbackProvider,
                   ToolCallback[] allTools) {
 
 //        向量数据库构造函数注入
-        this.lawAppVectorStore = lawAppVectorStore;
-
+//        this.lawAppVectorStore = lawAppVectorStore;
         this.toolCallbackProvider = syncMcpToolCallbackProvider;
         this.allTools = allTools;
+        this.ragService.initVectorStore();
 
 //        初始化基于文件的对话记忆
         String fileDir = System.getProperty("user.dir") + "/chat_memory";
 
-        FileBaseChatMemory chatMemory = new FileBaseChatMemory(fileDir);
+        FileBaseChatMemory chatMemory_file = new FileBaseChatMemory(fileDir);
 
 //        实现多轮记忆存储
-//        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
-
+        ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
 //       可以对全局启用预设 也可以对单次使用预设
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
                         /**
-                         *  真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理z
+                         *  真正保存在ChatMemory中 MessageChatMemoryAdvisor只是管理
                          *  MessageChatMemoryAdvisor.builder(chatMemory).build(),
                          *  自定义增强Advisor
                          *  new ReReadingAdvisor()
                          */
                         new MyLoggerAdvisor(),
 //                        对话记忆保存在文件中
+                        MessageChatMemoryAdvisor.builder(chatMemory_file).build(),
+
                         MessageChatMemoryAdvisor.builder(chatMemory).build()
+
                 )
                 .build();
     }
@@ -166,6 +172,7 @@ public class LawApp {
      * @return
      */
     public ChatResponse doChatWithRAG(String message, String chatId) {
+        initRAGVectorStore();
         return doChatWithRAGCustom(message, chatId, 5, 0.5);
     }
 

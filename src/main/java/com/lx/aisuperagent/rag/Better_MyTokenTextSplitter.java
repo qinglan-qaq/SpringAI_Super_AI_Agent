@@ -55,7 +55,7 @@ public class Better_MyTokenTextSplitter implements DocumentTransformer {
     public List<Document> splitWithBuilder(List<Document> documents) {
         TokenTextSplitter splitter = TokenTextSplitter.builder()
                 .withChunkSize(512)
-                .withMinChunkSizeChars(400)
+                .withMinChunkSizeChars(200)
                 .withMinChunkLengthToEmbed(10)
                 .withMaxNumChunks(5000)
                 .withKeepSeparator(true)

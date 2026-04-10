@@ -32,6 +32,7 @@ public class AgentController {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final QinglanManus qinglanManus;
+
     private final ToolCallback[] allTools;
 
     // 会话管理：chatId -> 消息列表 (role / content)
@@ -73,12 +74,16 @@ public class AgentController {
      */
     @PostMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter chatStream(@RequestBody AgentChatRequest request) {
+
         SseEmitter emitter = new SseEmitter(300_000L); // 5分钟超时
 
         String chatId = request.getChatId();
+
         List<Map<String, String>> history = chatHistories.computeIfAbsent(
                 chatId, k -> new ArrayList<>());
+
         appendHistory(chatId, "user", request.getMessage());
+
         ToolCallback[] selectedTools = filterTools(request.getToolIds());
 
         // 异步执行流式输出
