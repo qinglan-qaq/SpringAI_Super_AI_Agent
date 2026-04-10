@@ -1,7 +1,7 @@
 package com.lx.aisuperagent.agent;
 
 import cn.hutool.core.collection.CollUtil;
-import com.alibaba.cloud.ai.dashscope.agent.DashScopeAgentOptions;
+
 
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import com.lx.aisuperagent.agent.model.AgentState;
@@ -18,10 +18,13 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.model.tool.ToolExecutionResult;
 import org.springframework.ai.tool.ToolCallback;
-
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * 处理工具调用的基础类, 实现think 和 act方法
@@ -33,6 +36,8 @@ public class ToolCallAgent extends ReActAgent {
 
     //      可用的工具列表
     private final ToolCallback[] availableTools;
+    //      MCP 工具提供者（可选）
+    private final SyncMcpToolCallbackProvider mcpToolCallbackProvider;
     //      保存了工具调用信息的响应
     private ChatResponse toolCallChatResponse;
     //      工具调用管理者
@@ -43,10 +48,48 @@ public class ToolCallAgent extends ReActAgent {
     public ToolCallAgent(ToolCallback[] availableTools) {
         super();
         this.availableTools = availableTools;
+        this.mcpToolCallbackProvider = null;
         this.toolCallingManager = ToolCallingManager.builder().build();
         this.chatOptions = DashScopeChatOptions.builder()
 //                .enableInternalToolExecution(false)
                 .build();
+    }
+
+    public ToolCallAgent(ToolCallback[] availableTools, SyncMcpToolCallbackProvider mcpToolCallbackProvider) {
+        super();
+        this.availableTools = availableTools;
+        this.mcpToolCallbackProvider = mcpToolCallbackProvider;
+        this.toolCallingManager = ToolCallingManager.builder().build();
+        this.chatOptions = DashScopeChatOptions.builder()
+//                .enableInternalToolExecution(false)
+                .build();
+    }
+
+    /**
+     * 合并本地工具和 MCP 工具
+     */
+    private ToolCallback[] getAllTools() {
+        List<ToolCallback> toolList = new ArrayList<>();
+
+        // 添加本地工具
+        if (availableTools != null && availableTools.length > 0) {
+            toolList.addAll(Arrays.asList(availableTools));
+        }
+
+        // 添加 MCP 工具（如果可用）
+        if (mcpToolCallbackProvider != null) {
+            try {
+                ToolCallback[] mcpTools = mcpToolCallbackProvider.getToolCallbacks();
+                if (mcpTools != null && mcpTools.length > 0) {
+                    toolList.addAll(Arrays.asList(mcpTools));
+                    log.info("成功加载 {} 个 MCP 工具", mcpTools.length);
+                }
+            } catch (Exception e) {
+                log.warn("MCP 工具加载失败: {}", e.getMessage());
+            }
+        }
+
+        return toolList.toArray(new ToolCallback[0]);
     }
 
     /**
@@ -67,11 +110,11 @@ public class ToolCallAgent extends ReActAgent {
         List<Message> messageList = getMessageList();
         Prompt prompt = new Prompt(messageList, chatOptions);
         try {
-            //      配置对应的有工具调用的
+            //      配置对应的有工具调用的（合并本地工具和 MCP 工具）
+            ToolCallback[] allTools = getAllTools();
             ChatResponse chatResponse = getChatClient().prompt(prompt)
                     .system(getSystemPrompt())
-                    .toolCallbacks(availableTools)
-                    .options(DashScopeChatOptions.builder().withTopP(0.85).build())
+                    .toolCallbacks(allTools)
                     .call()
                     .chatResponse();
 
@@ -85,24 +128,32 @@ public class ToolCallAgent extends ReActAgent {
             List<AssistantMessage.ToolCall> toolCallList = assistantMessage.getToolCalls();
 
             log.info(getName() + "的思考" + result);
+            int callCount = toolCallList == null ? 0 : toolCallList.size();
+            log.info("{} 选择了 {} 个工具", getName(), callCount);
 
-            log.info("{} 选择了 {} 个工具", getName(), toolCallList != null ? toolCallList.size() : 0);
-
-            String toolCallInfo = toolCallList
-                    .stream()
-                    .map(toolCall -> String.format("工具名称: %s,参数: %s",
-                            toolCall.name(),
-                            toolCall.arguments())
-                    )
-                    .collect(Collectors.joining("\n"));
-            log.info(toolCallInfo);
-            //      调用工具不使用时记录助手消息
-            if (toolCallList.isEmpty()) {
-                getMessageList().add(assistantMessage);
-                return false;
-            } else {
+            if (callCount > 0) {
+                String toolCallInfo = toolCallList
+                        .stream()
+                        .map(toolCall -> String.format("工具名称: %s, 参数: %s",
+                                toolCall.name(),
+                                toolCall.arguments())
+                        )
+                        .collect(Collectors.joining("\n"));
+                log.info(toolCallInfo);
                 return true;
             }
+
+            //      如果没有工具调用但模型明确表示任务已完成，则提前结束代理
+            if (result != null) {
+                String lowerResult = result.toLowerCase(Locale.ROOT);
+                if (lowerResult.contains("任务结束") || lowerResult.contains("已完成") || lowerResult.contains("完成任务") || lowerResult.contains("结束任务") || lowerResult.contains("任务已完成")) {
+                    setState(AgentState.FINISHED);
+                    log.info("{} 检测到结束信号，已提前停止任务。", getName());
+                }
+            }
+
+            getMessageList().add(assistantMessage);
+            return false;
         } catch (Exception e) {
             log.error(getName() + "思考过程遇到困难" + e.getMessage());
             getMessageList().add(new AssistantMessage("处理时遇到错误: " + e.getMessage()));
@@ -132,14 +183,15 @@ public class ToolCallAgent extends ReActAgent {
         String results = toolResponseMessage
                 .getResponses()
                 .stream()
-                .map(response -> "工具" + response.name() + "完成了任务喵~😎😎😎成果为: " + response.responseData())
+                .map(response -> "工具调用: " + response.name() + "，结果: " + response.responseData())
                 .collect(Collectors.joining("\n"));
 
-        //        匹配任何有执行terminate的函数, 判断是否为true,改变状态
+        // 匹配任何包含 terminate 的工具调用，允许提前结束任务
         boolean terminateToolCalled = toolResponseMessage.getResponses().stream()
-                .anyMatch(toolResponse -> "doTerminate".equals(toolResponse.name()));
+                .anyMatch(toolResponse -> toolResponse.name() != null && toolResponse.name().equalsIgnoreCase("terminate"));
         if (terminateToolCalled) {
             setState(AgentState.FINISHED);
+            results = results + "\n任务已提前终止。";
         }
 
         log.info(results);

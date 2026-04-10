@@ -8,11 +8,14 @@ import org.springframework.ai.chat.client.advisor.ToolCallAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+
+import java.util.Optional;
 
 @Configuration
 public class qinglanManusConfig {
@@ -36,7 +39,8 @@ public class qinglanManusConfig {
     public QinglanManus qinglanManus(
             ChatClient.Builder builder,
             ToolCallback[] allTools,
-            ChatMemory chatMemory
+            ChatMemory chatMemory,
+            Optional<SyncMcpToolCallbackProvider> mcpToolCallbackProvider
     ) {
         // 1. 创建ToolCallingManager
         ToolCallingManager toolCallingManager = ToolCallingManager.builder()
@@ -53,11 +57,11 @@ public class qinglanManusConfig {
 
         // 4. 构建ChatClient
         ChatClient chatClient = builder
-                .defaultToolCallbacks(allTools)  // 注册工具
+                
                 .defaultAdvisors(toolCallAdvisor, memoryAdvisor)  // 添加Advisor
                 .defaultAdvisors(new MyLoggerAdvisor())
                 .build();
 
-        return new QinglanManus(chatClient);
+        return new QinglanManus(chatClient, allTools, mcpToolCallbackProvider.orElse(null));
     }
 }

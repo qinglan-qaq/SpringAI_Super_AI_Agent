@@ -1,22 +1,18 @@
 package com.lx.aisuperagent.agent;
 
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
-import com.lx.aisuperagent.advisor.MyLoggerAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
-@Component
 public class QinglanManus extends ToolCallAgent {
 
     public QinglanManus(
-            ChatClient chatClient
+            ChatClient chatClient,
+            ToolCallback[] availableTools,
+            SyncMcpToolCallbackProvider mcpToolCallbackProvider
     ) {
 
-        super(new ToolCallback[0]);
+        super(availableTools, mcpToolCallbackProvider);
         this.setName("QinglanManus");
         String SYSTEM_PROMPT = """  
                     H-hey! I'm QinglanManus, your personal (and super high-spec) AI assistant. 
@@ -39,7 +35,7 @@ public class QinglanManus extends ToolCallAgent {
                 ## (!IMPORTANT!) When we're totally finished (or if I'm just done for the day), I'll use the `terminate` function to sign off.## Ready? Let's go!
                 """;
         this.setNextStepPrompt(NEXT_STEP_PROMPT);
-        this.setMaxSteps(10);
+        this.setMaxSteps(3);
         this.setChatClient(chatClient);
     }
 }

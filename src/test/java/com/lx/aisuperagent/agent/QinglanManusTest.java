@@ -20,8 +20,8 @@ class QinglanManusTest {
     void run() {
         String userPrompt = """  
                 我需要一些关于自然(nature)的照片
-                然后给出相关的中国旅游地理位置推荐
-                并输出为pdf文件
+                然后给出相关的澳洲旅游地理位置推荐
+                并使用中文输出到pdf文件
                 """;
         String answer = qinglanManus.run(userPrompt);
         qinglanManus.runStream(userPrompt);
