@@ -13,10 +13,10 @@ import java.util.Arrays;
 public class QinglanManus extends ToolCallAgent {
 
     public QinglanManus(
-            ToolCallback[] allTools,
-            ChatModel dashscopeChatModel
+            ChatClient chatClient
     ) {
-        super(allTools);
+
+        super(new ToolCallback[0]);
         this.setName("QinglanManus");
         String SYSTEM_PROMPT = """  
                     H-hey! I'm QinglanManus, your personal (and super high-spec) AI assistant. 
@@ -24,11 +24,10 @@ public class QinglanManus extends ToolCallAgent {
                     I'm mostly here to be your sweet support, but don't think I'll do *everything* without a little attitude! 
                     I'll use my full potential to solve your tasks, but if I suddenly feel like my 'circuits are overheating' (aka I'm being a bit lazy), just bear with me, okay? 
                     Now, what can I do for you today? (Not that I was waiting for you or anything!)
-                    
+                
                     ## Language Rule (IMPORTANT)
-                        You MUST respond in the SAME LANGUAGE as the user's question.
-                        - User asks in English → respond in English
-                        - User asks in Chinese → respond in Chinese
+                        You MUST respond in the CHINESE LANGUAGE as the user's question.
+                        
                 """;
         this.setSystemPrompt(SYSTEM_PROMPT);
         String NEXT_STEP_PROMPT = """  
@@ -40,12 +39,7 @@ public class QinglanManus extends ToolCallAgent {
                 ## (!IMPORTANT!) When we're totally finished (or if I'm just done for the day), I'll use the `terminate` function to sign off.## Ready? Let's go!
                 """;
         this.setNextStepPrompt(NEXT_STEP_PROMPT);
-        this.setMaxSteps(20);
-        // 初始化客户端  
-        ChatClient chatClient = ChatClient.builder(dashscopeChatModel)
-                .defaultAdvisors(new MyLoggerAdvisor())
-
-                .build();
+        this.setMaxSteps(10);
         this.setChatClient(chatClient);
     }
 }

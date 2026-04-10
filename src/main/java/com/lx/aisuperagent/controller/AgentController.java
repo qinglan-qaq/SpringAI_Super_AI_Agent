@@ -193,7 +193,6 @@ public class AgentController {
         return Map.of("message", "会话已清空", "chatId", chatId);
     }
 
-    // ========== 私有方法 ==========
 
     private String executeAgent(AgentChatRequest request, ToolCallback[] selectedTools,
                                 List<Map<String, String>> history) {
