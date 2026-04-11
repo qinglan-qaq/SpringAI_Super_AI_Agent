@@ -1,20 +1,56 @@
 package com.lx.aisuperagent.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
-@Builder
+/**
+ * 聊天请求DTO
+ */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class AgentChatRequest {
-    private String message;           // 用户消息
-    private String chatId;            // 会话ID
-    private List<String> toolIds;     // 启用的工具ID列表
-    private boolean agentMode;        // 是否启用Agent模式
-    private String systemPrompt;      // 自定义系统提示词
+    /**
+     * 用户消息
+     */
+    private String message;
+
+    /**
+     * 会话ID
+     */
+    private String chatId;
+
+    /**
+     * 选择的工具ID列表（可选）
+     */
+    private List<String> toolIds;
+
+    /**
+     * 是否启用Agent模式（可选）
+     */
+    private boolean agentMode;
+
+    /**
+     * 自定义系统提示词（可选）
+     */
+    private String systemPrompt;
+
+    /**
+     * 是否使用RAG
+     */
+    private boolean useRAG;
+
+    /**
+     * 是否使用云知识库
+     */
+    private boolean useCloudRAG;
+
+    /**
+     * 检索前几的文档
+     */
+    private int ragTop_k;
+
+    /**
+     * RAG相似度阈值
+     */
+    private double ragThreshold;
+
 }

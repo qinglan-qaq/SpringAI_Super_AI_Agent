@@ -7,19 +7,21 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class PDFGenerationTool {
 
     @Tool(name = "Generate a PDF with the given content")
     public String GeneratePDF(
             //            给大模型理解的参数
-            @ToolParam(description = "Name of the file to save th egenenrated PDF") String fileName,
+            @ToolParam(description = "Name of the file to save the generated PDF") String fileName,
             @ToolParam(description = "content to be included in the PDF") String content) {
         String fileDir = FileConstant.FILE_SAVE_DIR;
         String filePath = fileDir + "/" + fileName;
@@ -39,6 +41,7 @@ public class PDFGenerationTool {
                 //      添加段落并关闭文档
                 document.add(paragraph);
             }
+            log.info("Pdf文件已生成!");
             return "PDF generated successfully to: " + filePath;
         } catch (IOException e) {
             return "Error generating PDF: " + e.getMessage();
